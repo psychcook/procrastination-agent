@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Prokrastinations-Agent - Willkommen{% endblock %}
+
+{% block content %}
+<div class="landing-container">
+    <div class="landing-card">
+        <div class="landing-icon">💭</div>
+        <h1 class="landing-title">Prokrastinations-Agent</h1>
+        <p class="landing-subtitle">Willkommen zu unserem Forschungsprojekt</p>
+
+        <p class="landing-text">
+            Dieses Tool hilft dir, deine Prokrastination zu verstehen und zu überwinden.
+            In einem strukturierten Gespräch erforschen wir gemeinsam die Ursachen und
+            entwickeln passende Strategien für dich.
+        </p>
+
+        <div class="info-box">
+            <div class="info-box-title">📋 ABLAUF (CA. 15-20 MINUTEN)</div>
+            <div class="info-box-text">
+                • <strong>Schritt 1:</strong> Kurzer Fragebogen (7 Fragen)<br>
+                • <strong>Schritt 2:</strong> Gespräch mit dem KI-Agent<br>
+                • <strong>Schritt 3:</strong> Abschließender Fragebogen
+            </div>
+        </div>
+
+        <div class="info-box">
+            <div class="info-box-title">🔒 DATENSCHUTZ</div>
+            <div class="info-box-text">
+                • Deine Gesprächsdaten sind <strong>anonym</strong><br>
+                • Fragebogen-Daten werden <strong>pseudonymisiert</strong> gespeichert<br>
+                • Nach dem Schließen des Fensters werden alle Daten gelöscht<br>
+                • Keine Verknüpfung mit persönlichen Informationen
+            </div>
+        </div>
+
+        <a href="{{ url_for('pre_questionnaire') }}" class="primary-btn">
+            Jetzt starten →
+        </a>
+
+        <div class="footer-note">
+            <strong>Student project by</strong><br>
+            Yves, Nathalie, Eileen & Jara<br>
+            Zurich School of Applied Sciences
+        </div>
+    </div>
+</div>
+{% endblock %}

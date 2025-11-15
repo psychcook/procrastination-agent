@@ -1,0 +1,232 @@
+{% extends "base.html" %}
+
+{% block title %}Chat - Prokrastinations-Agent{% endblock %}
+
+{% block content %}
+<input type="hidden" id="csrf_token" value="{{ csrf_token() }}"/>
+<div class="chat-container">
+    <div class="chat-sidebar">
+        <h2 class="chat-title">Prokrastinations-Agent</h2>
+        <p class="chat-subtitle">Unterstützung bei Aufschieberitis</p>
+
+        <div class="timeline-label">FORTSCHRITT</div>
+
+        <div class="timeline-item">
+            <div class="timeline-dot {% if state == 'intake' %}{% elif state in ['hypotheses', 'strategies', 'completion'] %}completed{% endif %}"></div>
+            <div class="timeline-text">
+                <div class="timeline-phase">Informationssammlung</div>
+                <div class="timeline-desc">Aufgabe verstehen</div>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-dot {% if state == 'hypotheses' %}{% elif state in ['strategies', 'completion'] %}completed{% else %}pending{% endif %}"></div>
+            <div class="timeline-text">
+                <div class="timeline-phase">Hypothesen</div>
+                <div class="timeline-desc">Ursachen erkunden</div>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-dot {% if state == 'strategies' %}{% elif state == 'completion' %}completed{% else %}pending{% endif %}"></div>
+            <div class="timeline-text">
+                <div class="timeline-phase">Strategien</div>
+                <div class="timeline-desc">Lösungen entwickeln</div>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-dot {% if state == 'completion' %}completed{% else %}pending{% endif %}"></div>
+            <div class="timeline-text">
+                <div class="timeline-phase">Abschluss</div>
+                <div class="timeline-desc">Session beenden</div>
+            </div>
+        </div>
+
+        <div style="margin-top: auto; padding-top: 32px; border-top: 1px solid var(--border); font-size: 11px; color: var(--text-secondary); line-height: 1.6;">
+            <strong style="color: var(--text-primary);">Student project by</strong><br>
+            Yves, Nathalie, Eileen & Jara<br>
+            Zurich School of Applied Sciences
+        </div>
+    </div>
+
+    <div class="chat-main">
+        <div class="chat-messages" id="chatMessages">
+            {% for message in messages %}
+            <div class="chat-message {{ message.role }}">
+                <div class="chat-message-avatar">
+                    {% if message.role == 'user' %}👤{% else %}🤖{% endif %}
+                </div>
+                <div class="chat-message-content">
+                    {{ message.content }}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="chat-input-container">
+            <form id="chatForm" class="chat-input-form">
+                <input
+                    type="text"
+                    id="chatInput"
+                    class="chat-input"
+                    placeholder="Deine Nachricht..."
+                    autocomplete="off"
+                    {% if state == 'completion' and session_completed %}disabled{% endif %}
+                >
+                <button type="submit" class="chat-send-btn" id="sendBtn" {% if state == 'completion' and session_completed %}disabled{% endif %}>
+                    Senden
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const chatMessages = document.getElementById('chatMessages');
+    const chatForm = document.getElementById('chatForm');
+    const chatInput = document.getElementById('chatInput');
+    const sendBtn = document.getElementById('sendBtn');
+
+    // Auto-scroll to bottom
+    function scrollToBottom() {
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    scrollToBottom();
+
+    // Handle message submission with streaming
+    chatForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const message = chatInput.value.trim();
+        if (!message) return;
+
+        // Disable input
+        chatInput.disabled = true;
+        sendBtn.disabled = true;
+
+        // Add user message to UI
+        addMessage('user', message);
+        chatInput.value = '';
+
+        try {
+            const csrfToken = document.getElementById('csrf_token').value;
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                },
+                body: JSON.stringify({ message })
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            // Create EventSource-like reader for SSE
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            let buffer = '';
+            let currentMessageDiv = null;
+            let currentContentDiv = null;
+            let fullText = '';
+
+            // Create assistant message container immediately
+            currentMessageDiv = document.createElement('div');
+            currentMessageDiv.className = 'chat-message assistant';
+
+            const avatar = document.createElement('div');
+            avatar.className = 'chat-message-avatar';
+            avatar.textContent = '🤖';
+
+            currentContentDiv = document.createElement('div');
+            currentContentDiv.className = 'chat-message-content';
+
+            currentMessageDiv.appendChild(avatar);
+            currentMessageDiv.appendChild(currentContentDiv);
+            chatMessages.appendChild(currentMessageDiv);
+
+            // Read stream
+            while (true) {
+                const {done, value} = await reader.read();
+
+                if (done) break;
+
+                // Decode chunk and add to buffer
+                buffer += decoder.decode(value, {stream: true});
+
+                // Process complete SSE messages
+                const lines = buffer.split('\n\n');
+                buffer = lines.pop(); // Keep incomplete message in buffer
+
+                for (const line of lines) {
+                    if (line.startsWith('data: ')) {
+                        const data = line.slice(6); // Remove 'data: ' prefix
+
+                        if (data === '[DONE]') {
+                            break;
+                        }
+
+                        try {
+                            const parsed = JSON.parse(data);
+
+                            if (parsed.text) {
+                                // Append text chunk to message
+                                fullText += parsed.text;
+                                currentContentDiv.textContent = fullText;
+                                scrollToBottom();
+                            } else if (parsed.type === 'metadata') {
+                                // Stream complete - handle metadata
+                                currentContentDiv.textContent = parsed.full_text;
+
+                                // Check if we should redirect
+                                if (parsed.session_completed) {
+                                    setTimeout(() => {
+                                        window.location.href = '/post-questionnaire';
+                                    }, 2000);
+                                }
+                            } else if (parsed.type === 'error') {
+                                currentContentDiv.textContent = 'Entschuldigung, es gab einen Fehler: ' + parsed.message;
+                            }
+                        } catch (e) {
+                            console.error('Error parsing SSE data:', e);
+                        }
+                    }
+                }
+            }
+
+        } catch (error) {
+            console.error('Error:', error);
+            addMessage('assistant', 'Entschuldigung, es gab einen Fehler. Bitte versuche es erneut.');
+        } finally {
+            // Re-enable input
+            chatInput.disabled = false;
+            sendBtn.disabled = false;
+            chatInput.focus();
+        }
+    });
+
+    function addMessage(role, content) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `chat-message ${role}`;
+
+        const avatar = document.createElement('div');
+        avatar.className = 'chat-message-avatar';
+        avatar.textContent = role === 'user' ? '👤' : '🤖';
+
+        const messageContent = document.createElement('div');
+        messageContent.className = 'chat-message-content';
+        messageContent.textContent = content;
+
+        messageDiv.appendChild(avatar);
+        messageDiv.appendChild(messageContent);
+
+        chatMessages.appendChild(messageDiv);
+        scrollToBottom();
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,8 @@
+anthropic
+python-dotenv
+flask
+gunicorn
+flask-wtf
+flask-limiter
+flask-talisman
+bleach

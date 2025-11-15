@@ -1,0 +1,10 @@
+# Railway Nixpacks Configuration
+# https://nixpacks.com/docs/configuration/file
+
+[start]
+# Start command for production using Gunicorn
+# - app_flask:app -> module:application
+# - --bind 0.0.0.0:$PORT -> Railway provides PORT env var
+# - --workers 2 -> Limited workers for SSE streaming compatibility
+# - --timeout 120 -> Extended timeout for Claude API calls
+cmd = "gunicorn app_flask:app --bind 0.0.0.0:$PORT --workers 2 --timeout 120"

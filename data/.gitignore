@@ -1,0 +1,5 @@
+# Ignore all JSON response files (user data)
+responses/*.json
+
+# But keep the directory structure
+!responses/.gitkeep

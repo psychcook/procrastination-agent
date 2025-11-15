@@ -1,0 +1,49 @@
+# Railway Ignore File
+# Files and directories to exclude from deployment
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Data (session data - optional: remove if you want persistent storage)
+data/responses/*.json
+
+# Documentation and prototypes
+docs/
+*.md
+!README.md
+
+# Old Streamlit app (keep it for reference but don't deploy)
+app.py
+app_original_backup.py
+screens/
+test_flask_quick.py
+app_flask_example.py
+
+# Git
+.git/
+.gitignore
+
+# Temporary files
+*.tmp
+*.log
