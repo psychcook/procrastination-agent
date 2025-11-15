@@ -52,7 +52,7 @@ PERMANENT_SESSION_LIFETIME = timedelta(hours=2)  # Session expires after 2 hours
 # Content Security Policy
 CSP = {
     'default-src': ["'self'"],
-    'script-src': ["'self'", "'unsafe-inline'"],  # unsafe-inline needed for inline scripts
+    'script-src': ["'self'", "'unsafe-inline'", 'https://cdn.jsdelivr.net'],  # unsafe-inline needed for inline scripts, jsdelivr for marked.js
     'style-src': ["'self'", "'unsafe-inline'"],  # unsafe-inline needed for inline styles
     'img-src': ["'self'", 'data:'],
     'font-src': ["'self'"],

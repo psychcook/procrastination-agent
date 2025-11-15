@@ -660,6 +660,48 @@ def chat_api():
     return Response(stream_with_context(generate()), mimetype='text/event-stream')
 
 
+@app.route('/api/update-state', methods=['POST'])
+@limiter.limit(RATE_LIMITS['chat'])
+def update_state():
+    """Update chat state after transition detected by client."""
+    session_id = get_or_create_session_id()
+    initialize_chat_session()
+
+    # Validate session ID
+    if not validate_session_id(session_id):
+        logger.warning(f"Invalid session ID in state update: {session_id}")
+        return jsonify({'error': 'Ungültige Session'}), 400
+
+    data = request.json
+    if not data:
+        return jsonify({'error': 'Keine Daten empfangen'}), 400
+
+    new_state = data.get('new_state')
+
+    # Validate state
+    valid_states = ['intake', 'hypotheses', 'strategies', 'completion']
+    if new_state not in valid_states:
+        logger.warning(f"Invalid state transition attempt: {new_state}")
+        return jsonify({'error': 'Ungültiger Zustand'}), 400
+
+    # Update state
+    session['current_state'] = new_state
+    if new_state == 'strategies':
+        session['interaction_count'] = 0
+    elif new_state == 'completion':
+        session['session_completed'] = True
+        mark_chat_complete(session_id)
+
+    session.modified = True
+    logger.info(f"Session {session_id} state updated to {new_state}")
+
+    return jsonify({
+        'status': 'success',
+        'new_state': new_state,
+        'session_completed': new_state == 'completion'
+    })
+
+
 @app.route('/post-questionnaire')
 def post_questionnaire():
     """Post-questionnaire page."""

@@ -65,6 +65,15 @@
         </div>
 
         <div class="chat-input-container">
+            <!-- Completion message and button (hidden by default) -->
+            <div id="completionMessage" style="display: none; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; margin-bottom: 16px; text-align: center; color: white;">
+                <p style="margin: 0 0 12px 0; font-weight: 600; font-size: 16px;">✨ Das Gespräch ist abgeschlossen!</p>
+                <p style="margin: 0 0 16px 0; font-size: 14px; opacity: 0.95;">Bitte fülle noch den kurzen Abschlussfragebogen aus, um die Session abzuschließen.</p>
+                <a href="/post-questionnaire" class="primary-btn" style="display: inline-block; text-decoration: none; padding: 12px 24px; background: white; color: #667eea; border-radius: 8px; font-weight: 600; transition: transform 0.2s;">
+                    Zum Abschlussfragebogen →
+                </a>
+            </div>
+
             <form id="chatForm" class="chat-input-form">
                 <input
                     type="text"
@@ -84,15 +93,66 @@
 {% endblock %}
 
 {% block scripts %}
+<!-- Marked.js for markdown rendering -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script>
     const chatMessages = document.getElementById('chatMessages');
     const chatForm = document.getElementById('chatForm');
     const chatInput = document.getElementById('chatInput');
     const sendBtn = document.getElementById('sendBtn');
 
+    // Keep track of current state
+    let currentState = '{{ state }}';
+
+    // Configure marked.js for safe rendering
+    marked.setOptions({
+        breaks: true,
+        gfm: true,
+        sanitize: false,
+        smartLists: true,
+        smartypants: true
+    });
+
+    // Helper function to render markdown to HTML
+    function renderMarkdown(text) {
+        return marked.parse(text);
+    }
+
     // Auto-scroll to bottom
     function scrollToBottom() {
         chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    // Update timeline dots based on state
+    function updateTimelineDots(newState) {
+        const timelineDots = document.querySelectorAll('.timeline-dot');
+
+        // Reset all to pending
+        timelineDots.forEach(dot => {
+            dot.classList.remove('completed');
+            dot.classList.add('pending');
+        });
+
+        // Update based on state
+        const stateOrder = ['intake', 'hypotheses', 'strategies', 'completion'];
+        const currentIndex = stateOrder.indexOf(newState);
+
+        timelineDots.forEach((dot, index) => {
+            if (index < currentIndex) {
+                dot.classList.remove('pending');
+                dot.classList.add('completed');
+            } else if (index === currentIndex) {
+                dot.classList.remove('pending', 'completed');
+            }
+        });
+    }
+
+    // Show completion message and disable chat
+    function showCompletionMessage() {
+        document.getElementById('completionMessage').style.display = 'block';
+        chatInput.disabled = true;
+        sendBtn.disabled = true;
+        scrollToBottom();
     }
 
     scrollToBottom();
@@ -177,17 +237,45 @@
                             if (parsed.text) {
                                 // Append text chunk to message
                                 fullText += parsed.text;
-                                currentContentDiv.textContent = fullText;
+                                currentContentDiv.innerHTML = renderMarkdown(fullText);
                                 scrollToBottom();
                             } else if (parsed.type === 'metadata') {
                                 // Stream complete - handle metadata
-                                currentContentDiv.textContent = parsed.full_text;
+                                currentContentDiv.innerHTML = renderMarkdown(parsed.full_text);
 
-                                // Check if we should redirect
+                                // Handle state transition if present
+                                if (parsed.new_state) {
+                                    console.log('State transition detected:', parsed.new_state);
+
+                                    // Update state via separate API call
+                                    try {
+                                        const stateResponse = await fetch('/api/update-state', {
+                                            method: 'POST',
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                                'X-CSRFToken': csrfToken
+                                            },
+                                            body: JSON.stringify({
+                                                new_state: parsed.new_state
+                                            })
+                                        });
+
+                                        if (stateResponse.ok) {
+                                            const stateData = await stateResponse.json();
+                                            console.log('State updated successfully:', stateData.new_state);
+                                            currentState = stateData.new_state;
+                                            updateTimelineDots(stateData.new_state);
+                                        } else {
+                                            console.error('Failed to update state:', await stateResponse.text());
+                                        }
+                                    } catch (stateError) {
+                                        console.error('Error updating state:', stateError);
+                                    }
+                                }
+
+                                // Check if session is completed
                                 if (parsed.session_completed) {
-                                    setTimeout(() => {
-                                        window.location.href = '/post-questionnaire';
-                                    }, 2000);
+                                    showCompletionMessage();
                                 }
                             } else if (parsed.type === 'error') {
                                 currentContentDiv.textContent = 'Entschuldigung, es gab einen Fehler: ' + parsed.message;
@@ -220,7 +308,12 @@
 
         const messageContent = document.createElement('div');
         messageContent.className = 'chat-message-content';
-        messageContent.textContent = content;
+        // User messages are plain text, assistant messages may have markdown
+        if (role === 'assistant') {
+            messageContent.innerHTML = renderMarkdown(content);
+        } else {
+            messageContent.textContent = content;
+        }
 
         messageDiv.appendChild(avatar);
         messageDiv.appendChild(messageContent);
