@@ -455,11 +455,13 @@ def chat_api():
         'role': 'user',
         'content': user_message
     })
+    session.modified = True  # Ensure Flask saves the modified session
 
     # Increment interaction count for strategies state
     current_state = session.get('current_state', 'intake')
     if current_state == 'strategies':
         session['interaction_count'] = session.get('interaction_count', 0) + 1
+        session.modified = True  # Ensure Flask saves the modified session
 
     def generate():
         """Generator function for SSE stream."""

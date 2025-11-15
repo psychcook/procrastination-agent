@@ -1,14 +1,14 @@
 # Psychological Foundations of the Procrastination Intervention Agent
 
-**Scientific Documentation & Evidence Base - CORRECTED VERSION**
+**Scientific Documentation & Evidence Base**
 
 ---
 
 **Authors:** Yves, Nathalie, Eileen & Jara  
 **Institution:** Zurich School of Applied Sciences  
 **Project:** Procrastination Intervention Research MVP  
-**Version:** 4.0
-**Last Updated:** November 2025
+**Version:** 4.0  
+**Last Updated:** November 2025  
 
 ---
 
