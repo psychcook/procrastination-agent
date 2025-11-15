@@ -1,13 +1,13 @@
 # Psychological Foundations of the Procrastination Intervention Agent
 
-**Scientific Documentation & Evidence Base**
+**Scientific Documentation & Evidence Base - CORRECTED VERSION**
 
 ---
 
-**Authors:** Yves, Nathalie, Eileen & Jara
-**Institution:** Zurich School of Applied Sciences
-**Project:** Procrastination Intervention Research MVP
-**Version:** 3.0
+**Authors:** Yves, Nathalie, Eileen & Jara  
+**Institution:** Zurich School of Applied Sciences  
+**Project:** Procrastination Intervention Research MVP  
+**Version:** 4.0
 **Last Updated:** November 2025
 
 ---
@@ -69,12 +69,14 @@ The agent uses warm, non-judgmental language with empathetic reflections to buil
 ### 1.2 Motivational Interviewing (MI)
 
 **Meta-Analysis Findings:**
-A comprehensive systematic review and meta-analysis (Rubak et al., 2005) revealed statistically significant mean intervention effects of MI with **odds ratio [OR]: 1.55**; 95% confidence interval: [1.40; 1.71]. MI outperforms traditional advice-giving in the treatment of a broad range of behavioral problems and diseases, with particularly marked effects for:
+A comprehensive systematic review and meta-analysis (Rubak et al., 2005) examined MI effectiveness across multiple studies. MI outperforms traditional advice-giving in the treatment of a broad range of behavioral problems and diseases, with particularly marked effects for:
 - Reducing substance use
 - Increasing physical activity
 - Reducing body weight
 - Improving treatment acceptance
 - Improving health behavior self-monitoring
+
+**Note on Statistical Reporting:** The original paper reports continuous outcomes (BMI reductions, blood pressure changes, cholesterol levels) rather than a single odds ratio summary statistic. The overall conclusion supports MI's superiority to traditional advice-giving across diverse behavioral interventions.
 
 **Key Principles:**
 
@@ -262,7 +264,7 @@ Overanalyzing or overthinking causes forward motion or decision-making to become
 - **Choice overload:** Overload of options causes paralysis, rendering one unable to reach conclusion
 
 **Research Evidence (Iyengar & Lepper, 2000):**
-Famous supermarket study: participants presented with 6 jam varieties were far more likely to purchase (31%) compared to those with 24 choices (only 3% bought). This demonstrates how excessive options lead to decision paralysis.
+Famous supermarket study: participants presented with 6 jam varieties were far more likely to purchase (30%) compared to those with 24 choices (only 3% bought). This demonstrates how excessive options lead to decision paralysis.
 
 **Application in Agent Design:**
 The agent identifies overwhelm when users describe:
@@ -286,7 +288,7 @@ Few assignments are submitted far ahead of deadline; submission accelerates at a
 People are willing to self-impose meaningful deadlines and they are effective, but people don't set them optimally. In the delay discounting context, procrastination can be viewed as a preference for immediate competing activity over delay to work on a required task.
 
 **Prevalence:**
-Procrastination chronically affects approximately **20% of the adult population** and up to **70% of undergraduate students**.
+Procrastination chronically affects approximately **20% of the adult population**. For students, the prevalence is higher: approximately 80-95% of students engage in procrastination, about 75% consider themselves procrastinators, and nearly 50% procrastinate consistently and problematically (Steel, 2007).
 
 **Application in Agent Design:**
 The agent identifies deadline problems when users mention:
@@ -388,12 +390,12 @@ Simon developed the theory of bounded rationality: individuals satisfice rather 
 **Satisficing vs. Maximizing:**
 Satisficers are pleased to settle for a good enough option, not necessarily the very best outcome. Maximizers seek optimal solutions through exhaustive searches.
 
-**Paradox of Maximizing:**
+**Paradox of Maximizing (Iyengar, Wells, & Schwartz, 2006):**
 A study found college graduates with high maximizing tendencies accepted jobs with **20% higher starting salaries** but were **less satisfied** with their jobs—demonstrating that seeking perfection doesn't lead to happiness.
 
 **Application in Agent Design:**
-Strategy: "Good Enough" Mindset
-Used for: Perfectionism
+Strategy: "Good Enough" Mindset  
+Used for: Perfectionism  
 How: Teach users to set "good enough" criteria and timeboxing to prevent endless revision cycles.
 
 ---
@@ -414,8 +416,8 @@ Gollwitzer described their functioning by the metaphor of "passing the control o
 - Valshtein, Oettingen, & Gollwitzer (2020): Mental Contrasting with Implementation Intentions (MCII) reduced bedtime procrastination in two randomized trials
 
 **Application in Agent Design:**
-Strategy: If-Then Planning
-Used for: All factors (universal technique)
+Strategy: If-Then Planning  
+Used for: All factors (universal technique)  
 How: "If it's 9am on Monday, then I will open the document and write just the title."
 
 ---
@@ -444,6 +446,9 @@ MCII improves physical activity and weight loss among stroke survivors over one 
 - **Implementation Intentions:** If-then plans automate responses to obstacles
 - **Combined Effect:** Mental contrasting increases commitment; implementation intentions increase follow-through
 
+**Note on Academic vs. Popular Publication:**
+The mental contrasting research appears in Oettingen's 2012 academic publications (particularly the comprehensive review in *European Review of Social Psychology*), while the popular WOOP framework was introduced in her 2014 book *Rethinking Positive Thinking* (Penguin Random House).
+
 **Application in Agent Design:**
 The agent's conversation arc naturally follows WOOP structure:
 - **Wish:** What task are you avoiding? (Intake)
@@ -471,8 +476,8 @@ Cognitive load from a complex task can be reduced by breaking it into smaller, s
 - Then conventional tasks
 
 **Application in Agent Design:**
-Strategy: Task Chunking
-Used for: Overwhelm
+Strategy: Task Chunking  
+Used for: Overwhelm  
 How: "Instead of 'write the report,' break it into: 1) Create outline, 2) Write introduction, 3) Draft section 1, etc."
 
 ---
@@ -519,8 +524,8 @@ Field experiment measured the impact of bundling instantly-gratifying but guilt-
 - Average weekly workouts increased by **10–12%** during and up to seventeen weeks post-intervention
 
 **Application in Agent Design:**
-Strategy: Temptation Bundling
-Used for: Task Aversion
+Strategy: Temptation Bundling  
+Used for: Task Aversion  
 How: "Listen to your favorite podcast only while working on this task—make it something you look forward to."
 
 ---
@@ -533,8 +538,8 @@ Self-criticism leads to procrastination. Self-compassionate individuals engage i
 **Definition:**
 Taking a kind and understanding stance toward oneself in instances of pain or failure rather than being harshly self-critical. An adaptive quality that may promote effective self-regulation and reduce stress associated with self-blame.
 
-**Meta-Analysis (94 studies):**
-Self-compassion is associated with health-promoting behaviors with small to medium effect sizes, including less bedtime procrastination.
+**Meta-Analysis (Zessin, Dickhäuser, & Garbade, 2015):**
+Self-compassion is associated with well-being with a moderate to large correlation. The meta-analysis combined **k = 79 samples** with an overall sample size of **N = 16,416**, finding an overall magnitude of the relationship between self-compassion and well-being of **r = .47**. The relationship was stronger for cognitive and psychological well-being compared to affective well-being.
 
 **Mindful Self-Compassion (MSC) Program:**
 An 8-week workshop designed to train people to be more self-compassionate. Intervention participants reported significantly larger increases in self-compassion, mindfulness, and wellbeing compared with controls.
@@ -543,8 +548,8 @@ An 8-week workshop designed to train people to be more self-compassionate. Inter
 Self-compassion operates through the motivation of care: "I want to do better not because I'm inadequate for failing, but just because I care about myself, I want to reach my full potential. I want to change unhealthy behaviors because I care."
 
 **Application in Agent Design:**
-Strategy: Self-Compassion
-Used for: Emotional dysregulation, perfectionism
+Strategy: Self-Compassion  
+Used for: Emotional dysregulation, perfectionism  
 How: "Talk to yourself like you'd talk to a friend who's struggling. You're not lazy—you're facing a challenge."
 
 ---
@@ -557,15 +562,12 @@ Start with a habit so easy you can't say no. When adopting a new habit, reduce i
 **BJ Fogg's Tiny Habits:**
 BJ Fogg founded the Behavior Design Lab at Stanford University. Research shows behavior happens when three things come together at the same moment: Motivation, Ability, and Prompt. Fogg suggests scaling down goals to something so easy it feels almost ridiculous—like flossing one tooth or doing a single push-up.
 
-**Research Support (Health Psychology Review, 2020):**
-Participants who focused on incremental changes (drinking one extra glass of water daily, taking a 5-minute walk) were **3x more likely to maintain habits after six months** compared to those pursuing ambitious goals.
-
 **Common Ground:**
 Both Clear and Fogg emphasize: make the habit stick by starting small. Both recommend using anchor moments and celebrations.
 
 **Application in Agent Design:**
-Strategy: 2-Minute Rule
-Used for: Overwhelm, lack of clarity
+Strategy: 2-Minute Rule  
+Used for: Overwhelm, lack of clarity  
 How: "Don't write the whole report—just open the document and type the title. That's it for today."
 
 ---
@@ -573,7 +575,7 @@ How: "Don't write the whole report—just open the document and type the title. 
 ### 3.9 Timeboxing & Structured Procrastination
 
 **Research Evidence:**
-Timeboxing ranked as the most useful productivity hack in a survey of 100 productivity techniques (Harvard Business Review). Clear, short-term deadlines reduce procrastination and keep people engaged.
+Timeboxing ranked as the most useful productivity hack in a survey of 100 productivity techniques analyzed by Marc Zao-Sanders for *Harvard Business Review* (2018). The analysis ranked productivity methods based on citation frequency in online articles. Clear, short-term deadlines reduce procrastination and keep people engaged.
 
 **Experimental Evidence (Ariely & Wertenbroch):**
 "Procrastination, Deadlines, and Performance" study demonstrates how self-set deadlines affect procrastination. Timeboxing helps combat procrastination by creating a sense of urgency, encouraging immediate action.
@@ -585,8 +587,8 @@ The prefrontal cortex (responsible for focus) filters distractions more aggressi
 "Work expands so as to fill the time available for its completion."
 
 **Application in Agent Design:**
-Strategy: Timeboxing
-Used for: Perfectionism, deadline problems
+Strategy: Timeboxing  
+Used for: Perfectionism, deadline problems  
 How: "Set a timer for 90 minutes. Whatever you produce in that time is 'good enough' for Version 1."
 
 ---
@@ -602,6 +604,8 @@ Time-structured Pomodoro interventions consistently:
 - Enhanced sustained task performance
 - Outperformed self-paced breaks
 
+Note: This scoping review focused specifically on anatomy education retention and was published in *BMC Medical Education* (2024).
+
 **Comparative Study (60 students):**
 25 students using Pomodoro (25 min work, 5 min break) vs. 35 students with self-regulated breaks:
 - Control group chose longer study sessions but experienced higher fatigue
@@ -612,8 +616,8 @@ Time-structured Pomodoro interventions consistently:
 Multiple workplace studies (IT, marketing, finance): Pomodoro increased output by **25-35%** compared to traditional work habits.
 
 **Application in Agent Design:**
-Strategy: Pomodoro Technique
-Used for: Overwhelm, task aversion
+Strategy: Pomodoro Technique  
+Used for: Overwhelm, task aversion  
 How: "Work for 25 minutes, then take a 5-minute break. Repeat. The breaks prevent mental fatigue."
 
 ---
@@ -691,12 +695,14 @@ These examples facilitate observational learning and increase reproduction likel
 Self-determination theory (SDT) proposes that social context (need support) predicts motivation (autonomous self-regulation), which predicts health behavior and/or outcomes.
 
 **Effectiveness of SDT Interventions:**
-Meta-analyses show SDT interventions have a sample-weighted average effect size of **d = .23**, with significant effects for:
-- Physical activity (.16 ≤ d ≤ .29)
+Meta-analyses show SDT interventions have a sample-weighted average correlation of **r = .23**, with significant effects for:
+- Physical activity (.16 ≤ r ≤ .29)
 - Sedentary behavior
 - Diet
 - Alcohol consumption
 - Smoking cessation
+
+**Note on Effect Size Reporting:** The Ng et al. (2012) meta-analysis reports correlation coefficients (r values), not Cohen's d effect sizes. The correlation for composite autonomous self-regulation and physical activity was r = 0.23.
 
 **Adherence and Autonomous Motivation:**
 Observational study (N = 126): adherence over a 2-week period was strongly related to patients' autonomous self-regulation for taking medication. Patients' autonomous motivation for adherence mediated the relation between perceptions of physicians' autonomy support and medication adherence.
@@ -878,8 +884,8 @@ The agent's conversation arc naturally follows WOOP structure, creating mental c
 | Design Decision | Evidence Base | Expected Outcome |
 |----------------|---------------|------------------|
 | Warm, friendly tone | Rogers' Person-Centered Therapy, digital health research | Builds therapeutic alliance, reduces shame |
-| Non-judgmental language | Compassion-Focused Therapy, Neff's self-compassion research | Reduces shame-based avoidance, increases engagement |
-| Collaborative partnership | Motivational Interviewing (OR: 1.55) | Superior to advice-giving, improves adherence |
+| Non-judgmental language | Compassion-Focused Therapy, self-compassion research | Reduces shame-based avoidance, increases engagement |
+| Collaborative partnership | Motivational Interviewing | Superior to advice-giving, improves adherence |
 | Validation before intervention | MI principle, Self-Determination Theory | Improves autonomous motivation |
 
 ---
@@ -890,8 +896,8 @@ The agent's conversation arc naturally follows WOOP structure, creating mental c
 |--------|---------------|-------------------|
 | Perfectionism | Procrastination research, self-efficacy mediation | Maladaptive perfectionism predicts procrastination |
 | Task Aversion | Emotion regulation research | r = 0.40 correlation |
-| Overwhelm | Cognitive load theory, Iyengar & Lepper (2000) | 31% vs. 3% purchase rate (choice overload) |
-| Deadline Problems | Temporal Motivation Theory, hyperbolic discounting | 20-70% prevalence in populations |
+| Overwhelm | Cognitive load theory, Iyengar & Lepper (2000) | 30% vs. 3% purchase rate (choice overload) |
+| Deadline Problems | Temporal Motivation Theory, hyperbolic discounting | 20% adult, 50-95% student prevalence |
 | Lack of Clarity | Analysis paralysis research | Depletes mental resources |
 | Emotional Dysregulation | Short-term mood repair theory | Medium effect size for ER training |
 | Self-Efficacy | Bandura's Social Cognitive Theory | Consistent negative correlation with procrastination |
@@ -902,14 +908,14 @@ The agent's conversation arc naturally follows WOOP structure, creating mental c
 
 | Strategy | Evidence Base | Effect Size/Outcome |
 |----------|---------------|---------------------|
-| "Good Enough" Mindset | Herbert Simon (Satisficing) | 20% higher salary but less satisfaction (maximizers) |
+| "Good Enough" Mindset | Herbert Simon (Satisficing), Iyengar et al. 2006 | 20% higher salary but less satisfaction (maximizers) |
 | Implementation Intentions | Gollwitzer meta-analysis | d = .65 (medium-large effect) |
 | WOOP Model | Oettingen research | 2x physical activity, 30% diet improvement |
 | Task Chunking | Cognitive load theory, Zeigarnik effect | Reduces overwhelm, frees cognitive resources |
 | Temptation Bundling | Milkman RCTs | 10-14% workout increase, sustained 17 weeks |
-| Self-Compassion | Neff meta-analysis (94 studies) | Small-medium effect on health behaviors |
-| 2-Minute Rule | Fogg, Clear, Health Psych Review 2020 | 3x better maintenance after 6 months |
-| Timeboxing | HBR survey, Ariely & Wertenbroch | #1 productivity hack |
+| Self-Compassion | Zessin et al. meta-analysis (79 studies) | r = .47 correlation with well-being |
+| 2-Minute Rule | Fogg, Clear | Facilitates habit formation |
+| Timeboxing | HBR analysis, Ariely & Wertenbroch | Top-ranked productivity technique |
 | Pomodoro Technique | 32 studies (N=5,270) | 25-35% productivity improvement |
 
 ---
@@ -932,7 +938,7 @@ The agent's conversation arc naturally follows WOOP structure, creating mental c
 |---------------|---------------|---------|
 | One question at a time | Cognitive load theory | Prevents overwhelm, allows processing |
 | Concrete examples | Bandura's observational learning | Facilitates behavior reproduction |
-| User choice emphasis | Self-Determination Theory (d = .23) | Autonomy support predicts adherence |
+| User choice emphasis | Self-Determination Theory (r = .23) | Autonomy support predicts adherence |
 | Step-by-step progression | Cognitive load, worked examples | Reduces cognitive burden |
 
 ---
@@ -941,127 +947,164 @@ The agent's conversation arc naturally follows WOOP structure, creating mental c
 
 ### Therapeutic Alliance & Motivational Interviewing
 
-Rogers, C. (1957). The necessary and sufficient conditions of therapeutic personality change. *Journal of Consulting Psychology*, 21(2), 95-103.
+Rogers, C. R. (1957). The necessary and sufficient conditions of therapeutic personality change. *Journal of Consulting Psychology*, 21(2), 95-103.  
+DOI: [10.1037/h0045357](https://doi.org/10.1037/h0045357)
 
-Rubak, S., Sandbæk, A., Lauritzen, T., & Christensen, B. (2005). Motivational interviewing: a systematic review and meta-analysis. *British Journal of General Practice*, 55(513), 305-312. [Odds Ratio: 1.55]
+Rubak, S., Sandbæk, A., Lauritzen, T., & Christensen, B. (2005). Motivational interviewing: a systematic review and meta-analysis. *British Journal of General Practice*, 55(513), 305-312.  
+PMID: 15826433; PMCID: PMC1463134
 
 ---
 
 ### Procrastination Psychology
 
-Steel, P. (2007). The nature of procrastination: A meta-analytic and theoretical review of quintessential self-regulatory failure. *Psychological Bulletin*, 133(1), 65-94. [691 correlations; conscientiousness r = -0.62]
+Steel, P. (2007). The nature of procrastination: A meta-analytic and theoretical review of quintessential self-regulatory failure. *Psychological Bulletin*, 133(1), 65-94.  
+DOI: [10.1037/0033-2909.133.1.65](https://doi.org/10.1037/0033-2909.133.1.65)
 
-Steel, P., & König, C. J. (2006). Integrating theories of motivation. *Academy of Management Review*, 31(4), 889-913. [Temporal Motivation Theory]
+Steel, P., & König, C. J. (2006). Integrating theories of motivation. *Academy of Management Review*, 31(4), 889-913.  
+DOI: [10.5465/amr.2006.22527462](https://doi.org/10.5465/amr.2006.22527462)
 
-Sirois, F. M., & Pychyl, T. A. (2013). Procrastination and the priority of short-term mood regulation: Consequences for future self. *Social and Personality Psychology Compass*, 7(2), 115-127.
+Sirois, F. M., & Pychyl, T. A. (2013). Procrastination and the priority of short-term mood regulation: Consequences for future self. *Social and Personality Psychology Compass*, 7(2), 115-127.  
+DOI: [10.1111/spc3.12011](https://doi.org/10.1111/spc3.12011)
 
 ---
 
 ### Self-Efficacy & Perfectionism
 
-Bandura, A. (1997). *Self-efficacy: The exercise of control*. New York: Freeman.
+Bandura, A. (1997). *Self-efficacy: The exercise of control*. New York: W.H. Freeman.  
+ISBN: 978-0716728504
 
-Burnam, A., Komarraju, M., Hamel, R., & Nadler, D. R. (2014). Do adaptive perfectionism and self-determined motivation reduce academic procrastination? *Learning and Individual Differences*, 36, 165-172.
+Burnam, A., Komarraju, M., Hamel, R., & Nadler, D. R. (2014). Do adaptive perfectionism and self-determined motivation reduce academic procrastination? *Learning and Individual Differences*, 36, 165-172.  
+DOI: [10.1016/j.lindif.2014.10.009](https://doi.org/10.1016/j.lindif.2014.10.009)
 
 ---
 
 ### Emotion Regulation
 
-Eckert, M., Ebert, D. D., Lehr, D., Sieland, B., & Berking, M. (2016). Overcome procrastination: Enhancing emotion regulation skills reduce procrastination. *Learning and Individual Differences*, 52, 10-18. [Medium effect size]
+Eckert, M., Ebert, D. D., Lehr, D., Sieland, B., & Berking, M. (2016). Overcome procrastination: Enhancing emotion regulation skills reduce procrastination. *Learning and Individual Differences*, 52, 10-18.  
+DOI: [10.1016/j.lindif.2016.10.001](https://doi.org/10.1016/j.lindif.2016.10.001)
 
 ---
 
 ### Implementation Intentions
 
-Gollwitzer, P. M., & Sheeran, P. (2006). Implementation intentions and goal achievement: A meta-analysis of effects and processes. *Advances in Experimental Social Psychology*, 38, 69-119. [d = .65]
+Gollwitzer, P. M., & Sheeran, P. (2006). Implementation intentions and goal achievement: A meta-analysis of effects and processes. *Advances in Experimental Social Psychology*, 38, 69-119.  
+DOI: [10.1016/S0065-2601(06)38002-1](https://doi.org/10.1016/S0065-2601(06)38002-1)
 
-Wieber, F., & Gollwitzer, P. M. (2010). Overcoming procrastination through planning. In C. Andreou & M. D. White (Eds.), *The thief of time: Philosophical essays on procrastination* (pp. 185-205). Oxford University Press.
+Wieber, F., & Gollwitzer, P. M. (2010). Overcoming procrastination through planning. In C. Andreou & M. D. White (Eds.), *The thief of time: Philosophical essays on procrastination* (pp. 185-205). Oxford University Press.  
+DOI: [10.1093/acprof:oso/9780195376685.003.0009](https://doi.org/10.1093/acprof:oso/9780195376685.003.0009)
 
-Valshtein, T. J., Oettingen, G., & Gollwitzer, P. M. (2020). Using mental contrasting with implementation intentions to reduce bedtime procrastination: Two randomised trials. *Psychology & Health*, 35(3), 275-301.
+Valshtein, T. J., Oettingen, G., & Gollwitzer, P. M. (2020). Using mental contrasting with implementation intentions to reduce bedtime procrastination: Two randomised trials. *Psychology & Health*, 35(3), 275-301.  
+DOI: [10.1080/08870446.2019.1652753](https://doi.org/10.1080/08870446.2019.1652753)
 
 ---
 
 ### WOOP / Mental Contrasting
 
-Oettingen, G. (2012). Future thought and behaviour change. *European Review of Social Psychology*, 23(1), 1-63.
+Oettingen, G. (2012). Future thought and behaviour change. *European Review of Social Psychology*, 23(1), 1-63.  
+DOI: [10.1080/10463283.2011.643698](https://doi.org/10.1080/10463283.2011.643698)
 
-Stadler, G., Oettingen, G., & Gollwitzer, P. M. (2009). Physical activity in women: Effects of a self-regulation intervention. *American Journal of Preventive Medicine*, 36(1), 29-34. [2x improvement]
+Oettingen, G. (2014). *Rethinking positive thinking: Inside the new science of motivation*. New York: Penguin Random House.  
+ISBN: 978-1591847939
+
+Stadler, G., Oettingen, G., & Gollwitzer, P. M. (2009). Physical activity in women: Effects of a self-regulation intervention. *American Journal of Preventive Medicine*, 36(1), 29-34.  
+DOI: [10.1016/j.amepre.2008.09.021](https://doi.org/10.1016/j.amepre.2008.09.021)
 
 ---
 
 ### Temptation Bundling
 
-Milkman, K. L., Minson, J. A., & Volpp, K. G. M. (2014). Holding the Hunger Games hostage at the gym: An evaluation of temptation bundling. *Management Science*, 60(2), 283-299.
+Milkman, K. L., Minson, J. A., & Volpp, K. G. M. (2014). Holding the Hunger Games hostage at the gym: An evaluation of temptation bundling. *Management Science*, 60(2), 283-299.  
+DOI: [10.1287/mnsc.2013.1784](https://doi.org/10.1287/mnsc.2013.1784)
 
-Kirgios, E. L., Mandel, G. H., Park, Y., Milkman, K. L., Gromet, D. M., Kay, J. S., & Duckworth, A. L. (2020). Teaching temptation bundling to boost exercise: A field experiment. *Organizational Behavior and Human Decision Processes*, 161, 20-35. [10-14% improvement]
+Kirgios, E. L., Mandel, G. H., Park, Y., Milkman, K. L., Gromet, D. M., Kay, J. S., & Duckworth, A. L. (2020). Teaching temptation bundling to boost exercise: A field experiment. *Organizational Behavior and Human Decision Processes*, 161, 20-35.  
+DOI: [10.1016/j.obhdp.2020.09.003](https://doi.org/10.1016/j.obhdp.2020.09.003)
 
 ---
 
 ### Self-Compassion
 
-Neff, K. D. (2023). Self-compassion: Theory, method, research, and intervention. *Annual Review of Psychology*, 74, 193-218. [Meta-analysis of 94 studies]
+Neff, K. D. (2023). Self-compassion: Theory, method, research, and intervention. *Annual Review of Psychology*, 74, 193-218.  
+DOI: [10.1146/annurev-psych-032420-031047](https://doi.org/10.1146/annurev-psych-032420-031047)
 
-Sirois, F. M., Kitner, R., & Hirsch, J. K. (2015). Self-compassion, affect, and health-promoting behaviors. *Health Psychology*, 34(6), 661-669.
+Zessin, U., Dickhäuser, O., & Garbade, S. (2015). The relationship between self-compassion and well-being: A meta-analysis. *Applied Psychology: Health and Well-Being*, 7(3), 340-364.  
+DOI: [10.1111/aphw.12051](https://doi.org/10.1111/aphw.12051)
+
+Sirois, F. M., Kitner, R., & Hirsch, J. K. (2015). Self-compassion, affect, and health-promoting behaviors. *Health Psychology*, 34(6), 661-669.  
+DOI: [10.1037/hea0000158](https://doi.org/10.1037/hea0000158)
 
 ---
 
 ### Behavior Change Models
 
-Fogg, B. J. (2009). A behavior model for persuasive design. *Persuasive Technology*, 40. [Over 1,200 citations]
+Fogg, B. J. (2009). A behavior model for persuasive design. *Persuasive Technology: Proceedings of the 4th International Conference on Persuasive Technology*, Article 40.  
+DOI: [10.1145/1541948.1541999](https://doi.org/10.1145/1541948.1541999)
 
-Prochaska, J. O., & DiClemente, C. C. (1983). Stages and processes of self-change of smoking: Toward an integrative model of change. *Journal of Consulting and Clinical Psychology*, 51(3), 390-395. [Transtheoretical Model]
+Prochaska, J. O., & DiClemente, C. C. (1983). Stages and processes of self-change of smoking: Toward an integrative model of change. *Journal of Consulting and Clinical Psychology*, 51(3), 390-395.  
+DOI: [10.1037/0022-006X.51.3.390](https://doi.org/10.1037/0022-006X.51.3.390)
 
 ---
 
 ### Self-Determination Theory
 
-Ng, J. Y., Ntoumanis, N., Thøgersen-Ntoumani, C., Deci, E. L., Ryan, R. M., Duda, J. L., & Williams, G. C. (2012). Self-determination theory applied to health contexts: A meta-analysis. *Perspectives on Psychological Science*, 7(4), 325-340. [d = .23 average effect]
+Ng, J. Y., Ntoumanis, N., Thøgersen-Ntoumani, C., Deci, E. L., Ryan, R. M., Duda, J. L., & Williams, G. C. (2012). Self-determination theory applied to health contexts: A meta-analysis. *Perspectives on Psychological Science*, 7(4), 325-340.  
+DOI: [10.1177/1745691612447309](https://doi.org/10.1177/1745691612447309)
 
 ---
 
 ### Cognitive Load Theory
 
-Van Merriënboer, J. J. G., & Sweller, J. (2005). Cognitive load theory and complex learning: Recent developments and future directions. *Educational Psychology Review*, 17(2), 147-177.
+Van Merriënboer, J. J. G., & Sweller, J. (2005). Cognitive load theory and complex learning: Recent developments and future directions. *Educational Psychology Review*, 17(2), 147-177.  
+DOI: [10.1007/s10648-005-3951-0](https://doi.org/10.1007/s10648-005-3951-0)
 
 ---
 
 ### Zeigarnik Effect
 
-Masicampo, E. J., & Baumeister, R. F. (2011). Consider it done! Plan making can eliminate the cognitive effects of unfulfilled goals. *Journal of Personality and Social Psychology*, 101(4), 667-683.
+Masicampo, E. J., & Baumeister, R. F. (2011). Consider it done! Plan making can eliminate the cognitive effects of unfulfilled goals. *Journal of Personality and Social Psychology*, 101(4), 667-683.  
+DOI: [10.1037/a0024192](https://doi.org/10.1037/a0024192)
 
 ---
 
 ### Choice Overload
 
-Iyengar, S. S., & Lepper, M. R. (2000). When choice is demotivating: Can one desire too much of a good thing? *Journal of Personality and Social Psychology*, 79(6), 995-1006. [Jam study: 31% vs. 3%]
+Iyengar, S. S., & Lepper, M. R. (2000). When choice is demotivating: Can one desire too much of a good thing? *Journal of Personality and Social Psychology*, 79(6), 995-1006.  
+DOI: [10.1037/0022-3514.79.6.995](https://doi.org/10.1037/0022-3514.79.6.995)
 
 ---
 
 ### Pomodoro Technique
 
-Multiple studies cited in scoping review: 32 studies, N = 5,270 participants. Consistent improvements in focus, reduced mental fatigue, 25-35% productivity improvement in workplace studies.
+AlKadhi, N., AlKhonin, S., Bukhary, D., Bushnak, M., & Ghazzawi, D. (2024). The Pomodoro technique's impact on university students' focus and long-term retention when studying anatomy: Scoping review. *BMC Medical Education*, 24(1), 264.  
+DOI: [10.1186/s12909-024-05226-3](https://doi.org/10.1186/s12909-024-05226-3)
 
 ---
 
-### Satisficing
+### Satisficing & Maximizing
 
-Simon, H. A. (1956). Rational choice and the structure of the environment. *Psychological Review*, 63(2), 129-138.
+Simon, H. A. (1956). Rational choice and the structure of the environment. *Psychological Review*, 63(2), 129-138.  
+DOI: [10.1037/h0042769](https://doi.org/10.1037/h0042769)
 
-Schwartz, B., Ward, A., Monterosso, J., Lyubomirsky, S., White, K., & Lehman, D. R. (2002). Maximizing versus satisficing: Happiness is a matter of choice. *Journal of Personality and Social Psychology*, 83(5), 1178-1197. [20% higher salary, less satisfaction]
+Schwartz, B., Ward, A., Monterosso, J., Lyubomirsky, S., White, K., & Lehman, D. R. (2002). Maximizing versus satisficing: Happiness is a matter of choice. *Journal of Personality and Social Psychology*, 83(5), 1178-1197.  
+DOI: [10.1037/0022-3514.83.5.1178](https://doi.org/10.1037/0022-3514.83.5.1178)
+
+Iyengar, S. S., Wells, R. E., & Schwartz, B. (2006). Doing better but feeling worse: Looking for the "best" job undermines satisfaction. *Psychological Science*, 17(2), 143-150.  
+DOI: [10.1111/j.1467-9280.2006.01677.x](https://doi.org/10.1111/j.1467-9280.2006.01677.x)
 
 ---
 
 ### Timeboxing
 
-Ariely, D., & Wertenbroch, K. (2002). Procrastination, deadlines, and performance: Self-control by precommitment. *Psychological Science*, 13(3), 219-224.
+Ariely, D., & Wertenbroch, K. (2002). Procrastination, deadlines, and performance: Self-control by precommitment. *Psychological Science*, 13(3), 219-224.  
+DOI: [10.1111/1467-9280.00441](https://doi.org/10.1111/1467-9280.00441)
 
-Harvard Business Review productivity survey (timeboxing ranked #1 of 100 techniques)
+Zao-Sanders, M. (2018, December 8). How timeboxing works and why it will make you more productive. *Harvard Business Review*. Retrieved from https://hbr.org/2018/12/how-timeboxing-works-and-why-it-will-make-you-more-productive
 
 ---
 
 ### Social Learning Theory
 
-Bandura, A. (1977). *Social learning theory*. Englewood Cliffs, NJ: Prentice Hall.
+Bandura, A. (1977). *Social learning theory*. Englewood Cliffs, NJ: Prentice Hall.  
+ISBN: 978-0138167448
 
 ---
 
@@ -1079,9 +1122,9 @@ The integration of these evidence-based components creates a therapeutic AI agen
 
 ---
 
-**Document Version:** 1.0
-**Created:** November 2025
-**Research Team:** Yves, Nathalie, Eileen & Jara
+**Document Version:** 4.0
+**Created:** November 2025  
+**Research Team:** Yves, Nathalie, Eileen & Jara  
 **Institution:** Zurich School of Applied Sciences
 
 *This document should be cited in any academic publication or presentation referencing the psychological foundations of this intervention.*

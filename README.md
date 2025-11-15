@@ -2,88 +2,91 @@
 
 An evidence-based AI-powered conversational agent for procrastination intervention, built on Claude by Anthropic.
 
-**Version:** 3.0 (Flask + Security Hardening + Streaming)
-**Tech Stack:** Python 3.11, Flask, Anthropic Claude API (Sonnet 4.5), Gunicorn, Railway
-**Research Team:** Yves, Nathalie, Eileen & Jara
-**Institution:** Zurich School of Applied Sciences
+**Version:** 3.0  
+**Tech Stack:** Python 3.11, Flask, Anthropic Claude API (claude-sonnet-4-5-20250929)  
+**Research Team:** Yves, Nathalie, Eileen & Jara  
+**Institution:** Zurich School of Applied Sciences  
 
 ---
 
 ## 🎯 Project Overview
 
-This research MVP provides evidence-based psychological intervention for procrastination through a structured 4-phase conversational flow. The agent combines insights from **clinical psychology**, **behavioral economics**, and **cognitive science** to deliver personalized strategies.
+This group project provides evidence-based psychological intervention for procrastination through a structured 4-phase conversational flow. The agent combines insights from **clinical psychology**, **behavioral economics**, and **cognitive science** to deliver personalized strategies.
 
 ### Key Features
 
-✅ **Evidence-Based Psychology** - Grounded in peer-reviewed research (Temporal Motivation Theory, Motivational Interviewing, Implementation Intentions)
-✅ **Therapeutic Alliance** - Warm, non-judgmental tone based on Rogers' Person-Centered Therapy
-✅ **State-Based Conversation** - Mirrors therapeutic process: Intake → Hypothesis → Strategies → Completion
-✅ **Real-Time Streaming** - Server-Sent Events (SSE) for ChatGPT-like word-by-word response
-✅ **Auto-Continuation** - Seamless state transitions without user interruption
-✅ **Privacy-First** - Pseudonymized data collection, no personal information
-✅ **Production-Ready** - Security hardening, rate limiting, CSRF protection
+✅ **Evidence-Based Psychology** - Grounded in peer-reviewed research (Temporal Motivation Theory, Motivational Interviewing, Implementation Intentions)  
+✅ **Therapeutic Alliance** - Warm, non-judgmental tone based on Rogers' Person-Centered Therapy  
+✅ **State-Based Conversation** - Mirrors therapeutic process: Intake → Hypothesis → Strategies → Completion  
+✅ **Real-Time Streaming** - Server-Sent Events (SSE) for ChatGPT-like word-by-word response  
+✅ **Auto-Continuation** - Seamless state transitions without user interruption  
+✅ **Privacy-First** - Pseudonymized data collection, no personal information  
+✅ **Production-Ready** - Security hardening, rate limiting, CSRF protection  
 
 ---
 
 ## 🧠 Scientific Foundation
 
-This agent is built on **decades of peer-reviewed research** across multiple disciplines:
+Built on **50+ peer-reviewed studies** across clinical psychology, behavioral economics, and cognitive science:
 
-### Procrastination Psychology (Steel, 2007)
-- **Meta-analysis of 691 correlations** validating 7 procrastination factors
-- Temporal Motivation Theory (TMT) framework
-- Conscientiousness correlation: **r = -0.62** (strong effect)
+**Core Frameworks:**
+- **Temporal Motivation Theory** (Steel, 2007) - Meta-analysis of 691 correlations
+- **Person-Centered Therapy** (Rogers) - Therapeutic alliance & unconditional positive regard
+- **Motivational Interviewing** - Validation before intervention
+- **Self-Determination Theory** - Autonomy support for sustained change
 
-### Therapeutic Approach
-- **Person-Centered Therapy** (Carl Rogers) - Unconditional positive regard, empathy, congruence
-- **Motivational Interviewing** - Meta-analysis shows **OR: 1.55** vs. traditional advice-giving
-- **Self-Determination Theory** - Autonomy support predicts sustained behavior change
+**Key Interventions:**
+- Implementation Intentions (d = .65), WOOP Model (2x activity improvement)
+- Temptation Bundling (10-14% increase), Self-Compassion (r = .47 well-being)
+- Pomodoro Technique (25-35% productivity gain), Task Chunking (Cognitive Load Theory)
 
-### Evidence-Based Interventions
-- **Implementation Intentions** (Gollwitzer) - Effect size **d = .65** (medium-large)
-- **WOOP Model** (Oettingen) - **2x improvement** in physical activity
-- **Temptation Bundling** (Milkman) - **10-14% increase** in gym attendance
-- **Self-Compassion** (Neff) - Meta-analysis of **94 studies**
-- **Task Chunking** - Cognitive Load Theory, Zeigarnik Effect
-- **Pomodoro Technique** - **25-35% productivity improvement** (32 studies, N=5,270)
+📖 **[Full Scientific Documentation](docs/psychological-foundations.md)** - Evidence base with citations
 
-### Conversation Design
-- **Fogg Behavior Model** - Motivation + Ability + Prompt
-- **Transtheoretical Model** - Stage-matched intervention (Prochaska & DiClemente)
-- **Cognitive Load Management** - One question at a time, worked examples
-- **Observational Learning** (Bandura) - Concrete strategy examples
+---
 
-📖 **[Read Full Scientific Documentation](docs/psychological-foundations.md)** - Comprehensive evidence base with citations
+## 🛡️ Why Anthropic Claude?
+
+For a sensitive therapeutic application like procrastination intervention, we chose **Anthropic's Claude API** over other LLM providers based on their industry-leading AI safety practices:
+
+### Constitutional AI Framework
+Anthropic pioneered **Constitutional AI (CAI)** - a structured approach to AI alignment that guides model behavior using predefined ethical principles derived from:
+- The UN Declaration of Human Rights
+- Trust and safety best practices from multiple research labs
+- Transparent, auditable rules rather than opaque training processes
+
+### Superior Safety Performance
+In joint safety evaluations with OpenAI (2025), Claude models demonstrated:
+- **Perfect instruction hierarchy scores** - Critical for maintaining therapeutic boundaries
+- **Stronger resistance to jailbreaking** - Protected by Constitutional Classifiers
+- **Safer behavior out-of-the-box** - Minimal need for extensive prompt engineering to ensure appropriate responses
+
+### High-Stakes Use Case Alignment
+Claude's design prioritizes **predictability and trust**, making it particularly well-suited for applications involving:
+- Vulnerable users seeking help
+- Psychological interventions requiring empathy and care
+- Sensitive topics where harmful outputs could cause real damage
+
+### Ongoing Safety Commitment
+Anthropic maintains rigorous safety standards through:
+- **AI Safety Levels (ASL-3)** protections for advanced models
+- Active support for AI safety regulation (endorsed California SB 53)
+- Continuous iteration on safety through the Responsible Scaling Policy
+
+For therapeutic AI applications where user wellbeing is paramount, these safety guarantees provide essential peace of mind that the agent will remain helpful, harmless, and aligned with therapeutic principles throughout the intervention.
 
 ---
 
 ## 📊 The Seven Procrastination Factors
 
-Based on **Piers Steel's Temporal Motivation Theory** (2007 meta-analysis):
+Based on **Piers Steel's Temporal Motivation Theory** (2007 meta-analysis of 691 correlations):
 
-1. **Perfectionism** - Fear of mistakes, unrealistically high standards
-2. **Task Aversion** - Unpleasant, boring, or frustrating tasks (r = 0.40 correlation)
-3. **Overwhelm** - Tasks feel too big or complex (cognitive load)
-4. **Deadline Problems** - Too much time, lack of urgency (hyperbolic discounting)
-5. **Lack of Clarity** - Unclear how/where to start (analysis paralysis)
-6. **Emotional Dysregulation** - Avoidance of negative feelings (short-term mood repair)
-7. **Self-Efficacy Doubts** - Doubts about own abilities (Bandura)
-
-Each factor is addressed with **matched, evidence-based intervention strategies**.
-
----
-
-## 🔬 Evidence-Based Intervention Strategies
-
-| Procrastination Factor | Intervention Strategy | Research Support |
-|------------------------|----------------------|------------------|
-| **Perfectionism** | "Good Enough" Mindset, Timeboxing | Simon (Satisficing), HBR #1 productivity hack |
-| **Task Aversion** | Temptation Bundling, 2-Minute Rule | Milkman (10-14% improvement), Fogg (3x maintenance) |
-| **Overwhelm** | Task Chunking, Pomodoro, Micro-Goals | Cognitive Load Theory, 25-35% productivity gain |
-| **Deadline Problems** | Artificial Deadlines, Accountability | Ariely & Wertenbroch, temporal discounting research |
-| **Lack of Clarity** | 5-Minute Clarity Session, Question Lists | Analysis paralysis research, decision-making studies |
-| **Emotional Dysregulation** | Emotion Labeling, Self-Compassion | Neff (94-study meta-analysis), ER training (medium effect) |
-| **Self-Efficacy Doubts** | Success Journal, Past-Wins List | Bandura's Social Cognitive Theory |
+1. **Perfectionism** - Fear of mistakes, unrealistic standards
+2. **Task Aversion** - Unpleasant/boring tasks (r = 0.40)
+3. **Overwhelm** - Tasks feel too big/complex
+4. **Deadline Problems** - Distant deadlines, lack of urgency
+5. **Lack of Clarity** - Unclear starting point
+6. **Emotional Dysregulation** - Avoidance of negative feelings
+7. **Self-Efficacy Doubts** - Doubts about abilities (Bandura)
 
 ---
 
@@ -103,58 +106,12 @@ Each factor is addressed with **matched, evidence-based intervention strategies*
 INTAKE → HYPOTHESES → STRATEGIES → COMPLETION
 ```
 
-### Phase 1: INTAKE (Assessment)
-**Goal:** Understand the procrastinated task
-**Approach:** Empathetic, one question at a time (Cognitive Load Management)
-**Collects:** Task description, deadline, emotional load (1-10), attempted solutions
+1. **INTAKE** - Understand the procrastinated task (empathetic assessment, one question at a time)
+2. **HYPOTHESES** - Identify psychological causes collaboratively (user validates hypotheses)
+3. **STRATEGIES** - Provide matched, evidence-based interventions (implementation intentions)
+4. **COMPLETION** - Reinforce learning and next steps (build self-efficacy)
 
-**Evidence Base:** Rogers' therapeutic assessment, Motivational Interviewing rapport-building
-
----
-
-### Phase 2: HYPOTHESES (Collaborative Formulation)
-**Goal:** Identify psychological causes collaboratively
-**Approach:** 2-3 specific, evidence-based hypotheses with supporting evidence
-**Validation:** User confirms which hypotheses resonate (MI principle)
-
-**Evidence Base:** Steel's 7 procrastination factors, validation before intervention (SDT autonomy support)
-
----
-
-### Phase 3: STRATEGIES (Intervention Planning)
-**Goal:** Provide matched, actionable strategies
-**Approach:** 2-3 concrete strategies directly addressing validated hypotheses
-**Format:** What + How (step-by-step) + Why it works
-
-**Evidence Base:** Implementation Intentions (Gollwitzer d=.65), WOOP Model, observational learning
-
----
-
-### Phase 4: COMPLETION (Consolidation & Next Steps)
-**Goal:** Reinforce learning and build confidence
-**Approach:** Summarize (mental contrasting), provide smallest next step, encourage
-**Outcome:** User feels understood, equipped, and motivated
-
-**Evidence Base:** Relapse prevention, self-efficacy building (Bandura), WOOP conclusion
-
----
-
-### ✨ Auto-Continuation Feature
-
-**UX Innovation:** When transitioning between states, the agent **automatically generates a continuation message** in the new state, creating seamless conversational flow without requiring user input.
-
-**Before:**
-```
-Agent: "I have enough information. Let me develop hypotheses..."
-[TRANSITION] *User must type something* ❌
-```
-
-**After:**
-```
-Agent: "I have enough information. Let me develop hypotheses..."
-[AUTOMATIC CONTINUATION]
-Agent: "I see a few patterns here. Hypothesis 1: ..." ✅
-```
+**Auto-Continuation Feature:** Agent seamlessly transitions between states without requiring user input, creating natural conversational flow
 
 ---
 
@@ -179,10 +136,11 @@ cp .env.example .env
 3. **Add your secrets to `.env`:**
 ```
 ANTHROPIC_API_KEY=sk-ant-...
-SECRET_KEY=<generate-with-python>
+SECRET_KEY=<generate_with_python_os_urandom>
+ADMIN_TOKEN=<generate_secure_token_for_data_download>
 ```
 
-**Generate SECRET_KEY:**
+**Generate SECRET_KEY and ADMIN_TOKEN:**
 ```bash
 python3 -c "import os; print(os.urandom(32).hex())"
 ```
@@ -229,7 +187,8 @@ procrastination_agent/
 ├── data/responses/             # Anonymized session data (JSON)
 │
 └── docs/
-    └── psychological-foundations.md  # Scientific documentation
+    ├── psychological-foundations.md  # Scientific documentation
+    └── ux-design-specification.md    # UX Design Specification
 ```
 
 ---
@@ -237,13 +196,13 @@ procrastination_agent/
 ## 🔒 Security & Privacy
 
 ### Implemented Security Measures
-✅ **CSRF Protection** - Flask-WTF token-based protection
-✅ **Rate Limiting** - Per-endpoint limits (20 chat requests/hour)
-✅ **Input Sanitization** - Bleach library for XSS prevention
-✅ **Session Encryption** - Flask sessions with SECRET_KEY
-✅ **HTTPS Only** - Talisman security headers (production)
-✅ **Content Security Policy** - Strict CSP headers
-✅ **Input Validation** - Length limits, type checking, value ranges
+✅ **CSRF Protection** - Flask-WTF token-based protection  
+✅ **Rate Limiting** - Per-endpoint limits (20 chat requests/hour)  
+✅ **Input Sanitization** - Bleach library for XSS prevention  
+✅ **Session Encryption** - Flask sessions with SECRET_KEY  
+✅ **HTTPS Only** - Talisman security headers (production)  
+✅ **Content Security Policy** - Strict CSP headers  
+✅ **Input Validation** - Length limits, type checking, value ranges  
 
 ### Privacy-First Design
 - **Pseudonymized Data** - UUID session IDs, no personal information
@@ -286,6 +245,26 @@ procrastination_agent/
 
 ---
 
+## 💾 Data Access & Persistence
+
+### Quick Data Access (Download Endpoint)
+
+1. **Set Admin Token on Railway:**
+```bash
+# Generate secure token
+python -c "import secrets; print(secrets.token_urlsafe(32))"
+
+# Set on Railway
+railway variables set ADMIN_TOKEN=your-generated-token
+```
+
+2. **Download Data:**
+Visit: `https://your-app.up.railway.app/api/download-data?token=YOUR_ADMIN_TOKEN`
+
+This downloads a timestamped JSON file with all session data (rate limited, secure).
+
+---
+
 ## 🚂 Deployment (Railway)
 
 ### One-Click Deploy
@@ -321,15 +300,6 @@ railway up
 railway domain
 ```
 
-### GitHub Auto-Deploy (Recommended)
-
-1. Push code to GitHub
-2. Go to [railway.app](https://railway.app) → New Project → Deploy from GitHub
-3. Select repository
-4. Set environment variables in Railway dashboard
-5. Generate domain
-6. 🎉 Auto-deploys on every push to main!
-
 **Deployment files:**
 - `nixpacks.toml` - Defines Gunicorn start command
 - `.railwayignore` - Excludes unnecessary files
@@ -338,47 +308,23 @@ railway domain
 
 ## 📖 Documentation
 
-### For Developers
-- **[CLAUDE.md](CLAUDE.md)** - Technical documentation, architecture, API endpoints
-- **[FRAMEWORK_COMPARISON.md](FRAMEWORK_COMPARISON.md)** - Streamlit vs. Flask comparison
-- **[FLASK_MIGRATION_COMPLETE.md](FLASK_MIGRATION_COMPLETE.md)** - Migration guide
-- **[RAILWAY_DEPLOYMENT.md](RAILWAY_DEPLOYMENT.md)** - Deployment guide
-- **[STREAMING_RAILWAY_IMPLEMENTATION.md](STREAMING_RAILWAY_IMPLEMENTATION.md)** - SSE implementation details
+**For Developers:**
+- **[CLAUDE.md](CLAUDE.md)** - Complete technical documentation, architecture, API endpoints
+- **[docs/ux-design-specification.md](docs/ux-design-specification.md)** - User experience design principles and guidelines
 
-### For Researchers
-- **[docs/psychological-foundations.md](docs/psychological-foundations.md)** - Scientific evidence base, citations, research support
-
-### For Users
-- **[README.de.md](README.de.md)** - German version of this README
+**For Researchers:**
+- **[docs/psychological-foundations.md](docs/psychological-foundations.md)** - Complete scientific evidence base
 
 ---
 
-## 🎓 Scientific Credibility
+## 🎓 Research Validation
 
-### Research Validation
+Supported by **50+ peer-reviewed studies** including:
+- **Meta-analyses:** Steel (691 correlations), Gollwitzer (94 studies), Neff & Zessin (79 studies)
+- **RCTs:** Milkman (Temptation Bundling), Oettingen (WOOP), Eckert (Emotion Regulation)
+- **Validated theories:** Temporal Motivation Theory, Self-Determination Theory, Social Cognitive Theory
 
-This agent's design is supported by:
-- **50+ peer-reviewed studies** across clinical psychology, behavioral economics, and cognitive science
-- **Multiple meta-analyses** (Steel: 691 correlations; Gollwitzer: 94 studies; Neff: 94 studies)
-- **Randomized controlled trials** (Milkman, Oettingen, etc.)
-- **Well-validated theories** (TMT, SDT, Social Cognitive Theory, Cognitive Load Theory)
-
-### Key Research Citations
-
-**Procrastination Psychology:**
-- Steel, P. (2007). The nature of procrastination: A meta-analytic and theoretical review. *Psychological Bulletin*, 133(1), 65-94.
-
-**Intervention Effectiveness:**
-- Gollwitzer, P. M., & Sheeran, P. (2006). Implementation intentions and goal achievement. *Advances in Experimental Social Psychology*, 38, 69-119. [d = .65]
-- Rubak, S., et al. (2005). Motivational interviewing: A systematic review and meta-analysis. *British Journal of General Practice*, 55(513), 305-312. [OR: 1.55]
-
-**Therapeutic Alliance:**
-- Rogers, C. (1957). The necessary and sufficient conditions of therapeutic personality change. *Journal of Consulting Psychology*, 21(2), 95-103.
-
-**Behavior Change:**
-- Fogg, B. J. (2009). A behavior model for persuasive design. *Persuasive Technology*, 40.
-
-📖 **[Full References in Scientific Documentation](docs/psychological-foundations.md#7-references)**
+📖 **[Full References](docs/psychological-foundations.md#7-references)** - Complete citations and DOIs in scientific documentation
 
 ---
 
@@ -467,15 +413,15 @@ data: [DONE]
 
 ## 👥 Team
 
-**Authors:** Yves, Nathalie, Eileen & Jara
-**Institution:** Zurich School of Applied Sciences
-**Project Type:** Research MVP for Procrastination Intervention
+**Authors:** Yves, Nathalie, Eileen & Jara  
+**Institution:** Zurich School of Applied Sciences  
+**Project Type:** Research group project for Procrastination Intervention  
 
 ---
 
 ## 📄 License
 
-MIT License
+[MIT License](LICENSE)
 
 ---
 
@@ -494,12 +440,4 @@ This project builds on decades of research by:
 
 ---
 
-## 📞 Contact
-
-For research inquiries or collaboration opportunities, please contact the research team at Zurich School of Applied Sciences.
-
----
-
 _With ❤️ by Yves, who had a little too much caffeine, and some spare time._
-
-**🔗 [German Version / Deutsche Version](README.de.md)**

@@ -15,7 +15,7 @@ import logging
 from datetime import datetime
 from pathlib import Path
 
-from flask import Flask, render_template, request, session, redirect, url_for, jsonify, Response
+from flask import Flask, render_template, request, session, redirect, url_for, jsonify, Response, stream_with_context
 from flask_wtf.csrf import CSRFProtect, CSRFError
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
@@ -82,7 +82,8 @@ talisman = Talisman(
     app,
     force_https=FORCE_HTTPS,
     content_security_policy=CSP,
-    content_security_policy_nonce_in=['script-src'],
+    # Removed nonce requirement - using 'unsafe-inline' instead for simplicity
+    # To use nonces, add nonce="{{ csp_nonce() }}" to all <script> tags in templates
     strict_transport_security=True,
     strict_transport_security_max_age=31536000,
 )
@@ -299,7 +300,7 @@ def get_ai_response(user_message):
     try:
         # Call Claude API
         response = client.messages.create(
-            model="claude-sonnet-4-20250514",
+            model="claude-sonnet-4-5-20250929",
             max_tokens=1024,
             system=system_prompt,
             messages=messages
@@ -481,24 +482,32 @@ def chat_api():
                 "cache_control": {"type": "ephemeral"}
             }]
 
-            # Build messages for API
+            # Build messages for API (with content as array for caching support)
+            session_messages = session.get('messages', [])
             messages = []
-            for msg in session.get('messages', []):
-                messages.append({
+            for idx, msg in enumerate(session_messages):
+                # Convert content to array format required for prompt caching
+                message = {
                     "role": msg['role'],
-                    "content": msg['content']
-                })
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": msg['content']
+                        }
+                    ]
+                }
 
-            # Add cache_control to second-to-last message to cache conversation history
-            # This caches everything except the current user message
-            if len(messages) >= 2:
-                # Add cache_control as a top-level key (not inside content)
-                messages[-2]["cache_control"] = {"type": "ephemeral"}
+                # Add cache_control to second-to-last message's content block
+                # This caches conversation history (everything except current user message)
+                if len(session_messages) >= 2 and idx == len(session_messages) - 2:
+                    message["content"][0]["cache_control"] = {"type": "ephemeral"}
+
+                messages.append(message)
 
             # Stream from Claude API
             full_response = ""
             with client.messages.stream(
-                model="claude-sonnet-4-20250514",
+                model="claude-sonnet-4-5-20250929",
                 max_tokens=1024,
                 system=system_prompt,
                 messages=messages
@@ -564,22 +573,31 @@ def chat_api():
                     "cache_control": {"type": "ephemeral"}
                 }]
 
-                # Build messages including the first response
+                # Build messages including the first response (with content as array for caching)
+                continuation_session_messages = session.get('messages', [])
                 continuation_messages = []
-                for msg in session.get('messages', []):
-                    continuation_messages.append({
+                for idx, msg in enumerate(continuation_session_messages):
+                    # Convert content to array format required for prompt caching
+                    message = {
                         "role": msg['role'],
-                        "content": msg['content']
-                    })
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": msg['content']
+                            }
+                        ]
+                    }
 
-                # Add cache_control to second-to-last message
-                if len(continuation_messages) >= 2:
-                    continuation_messages[-2]["cache_control"] = {"type": "ephemeral"}
+                    # Add cache_control to second-to-last message's content block
+                    if len(continuation_session_messages) >= 2 and idx == len(continuation_session_messages) - 2:
+                        message["content"][0]["cache_control"] = {"type": "ephemeral"}
+
+                    continuation_messages.append(message)
 
                 # Stream second response (continuation in new state)
                 continuation_response = ""
                 with client.messages.stream(
-                    model="claude-sonnet-4-20250514",
+                    model="claude-sonnet-4-5-20250929",
                     max_tokens=1024,
                     system=new_system_prompt,
                     messages=continuation_messages
@@ -637,7 +655,7 @@ def chat_api():
             error_data = {'type': 'error', 'message': GENERIC_API_ERROR_MESSAGE}
             yield f"data: {json.dumps(error_data)}\n\n"
 
-    return Response(generate(), mimetype='text/event-stream')
+    return Response(stream_with_context(generate()), mimetype='text/event-stream')
 
 
 @app.route('/post-questionnaire')
@@ -694,6 +712,46 @@ def save_post_q():
 def thank_you():
     """Thank you page."""
     return render_template('thank_you.html')
+
+
+@app.route('/api/download-data')
+@limiter.limit("10 per day")
+def download_data():
+    """
+    Download all questionnaire data as JSON.
+    Requires ADMIN_TOKEN for authentication.
+
+    Usage: /api/download-data?token=YOUR_ADMIN_TOKEN
+    """
+    # Check authentication
+    admin_token = os.getenv('ADMIN_TOKEN')
+    if not admin_token:
+        return jsonify({'error': 'Admin access not configured'}), 403
+
+    provided_token = request.args.get('token')
+    if not provided_token or provided_token != admin_token:
+        logger.warning(f"Unauthorized data download attempt from {request.remote_addr}")
+        return jsonify({'error': 'Unauthorized'}), 401
+
+    try:
+        from utils.storage import get_all_session_data
+        sessions = get_all_session_data()
+
+        # Create response with JSON file download
+        response = Response(
+            json.dumps(sessions, indent=2, ensure_ascii=False),
+            mimetype='application/json',
+            headers={
+                'Content-Disposition': f'attachment; filename=questionnaire_data_{datetime.now().strftime("%Y%m%d_%H%M%S")}.json'
+            }
+        )
+
+        logger.info(f"Data download successful: {len(sessions)} sessions")
+        return response
+
+    except Exception as e:
+        logger.error(f"Error downloading data: {str(e)}")
+        return jsonify({'error': 'Error retrieving data'}), 500
 
 
 @app.route('/_health')

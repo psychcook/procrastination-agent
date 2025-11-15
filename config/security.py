@@ -78,9 +78,9 @@ MAX_CHAT_MESSAGE_LENGTH = 1000  # Maximum characters per message
 MIN_CHAT_MESSAGE_LENGTH = 1  # Minimum characters per message
 
 # Questionnaire validation
-VALID_SCALE_VALUES = [1, 2, 3, 4, 5, 6, 7]  # Valid Likert scale values
-PRE_QUESTIONNAIRE_COUNT = 7  # Expected number of pre-questionnaire questions
-POST_QUESTIONNAIRE_COUNT = 12  # Expected number of post-questionnaire questions
+VALID_SCALE_VALUES = [1, 2, 3, 4, 5, 6, 7]  # Valid Likert scale values (supports both 1-5 and 1-7 scales)
+PRE_QUESTIONNAIRE_COUNT = 4  # Expected number of pre-questionnaire questions
+POST_QUESTIONNAIRE_COUNT = 11  # Expected number of post-questionnaire questions
 
 # Request size limits
 MAX_CONTENT_LENGTH = 16 * 1024  # 16 KB maximum request size
