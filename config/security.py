@@ -74,7 +74,7 @@ HSTS_INCLUDE_SUBDOMAINS = True
 # ============================================================================
 
 # Chat message validation
-MAX_CHAT_MESSAGE_LENGTH = 1000  # Maximum characters per message
+MAX_CHAT_MESSAGE_LENGTH = 2000  # Maximum characters per message
 MIN_CHAT_MESSAGE_LENGTH = 1  # Minimum characters per message
 
 # Questionnaire validation
