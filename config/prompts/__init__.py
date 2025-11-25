@@ -1,45 +1,37 @@
 """
-System Prompts for Prokrastinations-Agent
-==========================================
-Manages loading and accessing system prompts for different conversation states.
+System Prompt for Prokrastinations-Agent
+=========================================
+Manages loading the unified system prompt with state injection.
 """
 
 from pathlib import Path
-from typing import Dict
-
 
 PROMPTS_DIR = Path(__file__).parent
 
 
-def load_prompts() -> Dict[str, str]:
+def load_system_prompt() -> str:
+    """Load the unified system prompt."""
+    file_path = PROMPTS_DIR / "system.txt"
+    with open(file_path, 'r', encoding='utf-8') as f:
+        return f.read().strip()
+
+
+# Load prompt once at module import
+SYSTEM_PROMPT = load_system_prompt()
+
+
+def get_prompt(state: str, interaction_count: int = 0) -> str:
     """
-    Load all system prompts from text files.
+    Get prompt with state and interaction count injected.
+
+    Args:
+        state: Current conversation state (intake, hypotheses, strategies, completion)
+        interaction_count: Number of exchanges in strategies state
 
     Returns:
-        dict: Dictionary mapping state names to prompt content
+        Formatted system prompt string
     """
-    prompts = {}
-
-    prompt_files = {
-        "intake": "intake.txt",
-        "hypotheses": "hypotheses.txt",
-        "strategies": "strategies.txt",
-        "completion": "completion.txt"
-    }
-
-    for state, filename in prompt_files.items():
-        file_path = PROMPTS_DIR / filename
-        try:
-            with open(file_path, 'r', encoding='utf-8') as f:
-                prompts[state] = f.read().strip()
-        except FileNotFoundError:
-            raise FileNotFoundError(
-                f"Prompt file not found: {file_path}. "
-                f"Ensure all prompt files exist in config/prompts/"
-            )
-
-    return prompts
-
-
-# Load prompts once at module import
-SYSTEM_PROMPTS = load_prompts()
+    return SYSTEM_PROMPT.format(
+        current_state=state.upper(),
+        interaction_count=interaction_count
+    )

@@ -26,7 +26,7 @@ import bleach
 
 # Import existing utilities (they work with Flask too!)
 from config.questions import get_pre_questionnaire, get_post_questionnaire
-from config.prompts import SYSTEM_PROMPTS
+from config.prompts import get_prompt
 from config.security import (
     get_security_config, RATE_LIMITS, CSP, FORCE_HTTPS,
     MAX_CHAT_MESSAGE_LENGTH, MIN_CHAT_MESSAGE_LENGTH,
@@ -90,9 +90,9 @@ talisman = Talisman(
 
 
 # ============================================================================
-# System prompts are now loaded from config/prompts/
+# System prompt is loaded from config/prompts/system.txt
 # ============================================================================
-# SYSTEM_PROMPTS imported from config.prompts at top of file
+# get_prompt() imported from config.prompts - injects state and interaction_count
 
 
 # ============================================================================
@@ -264,12 +264,8 @@ def get_ai_response(user_message):
 
     # Get current state and build system prompt with prompt caching
     current_state = session.get('current_state', 'intake')
-    system_prompt_text = SYSTEM_PROMPTS.get(current_state, SYSTEM_PROMPTS['intake'])
-
-    # Add interaction count to strategies prompt
-    if current_state == 'strategies':
-        interaction_count = session.get('interaction_count', 0)
-        system_prompt_text = system_prompt_text.format(interaction_count=interaction_count)
+    interaction_count = session.get('interaction_count', 0)
+    system_prompt_text = get_prompt(current_state, interaction_count)
 
     # Convert to array format with cache_control for prompt caching
     system_prompt = [{
@@ -472,10 +468,8 @@ def chat_api():
                 return
 
             # Build system prompt with prompt caching
-            system_prompt_text = SYSTEM_PROMPTS.get(current_state, SYSTEM_PROMPTS['intake'])
-            if current_state == 'strategies':
-                interaction_count = session.get('interaction_count', 0)
-                system_prompt_text = system_prompt_text.format(interaction_count=interaction_count)
+            interaction_count = session.get('interaction_count', 0)
+            system_prompt_text = get_prompt(current_state, interaction_count)
 
             # Convert to array format with cache_control for prompt caching
             system_prompt = [{
@@ -563,10 +557,8 @@ def chat_api():
                 logger.info(f"Auto-continuation: Generating response in new state '{new_state}'")
 
                 # Build new system prompt for the transitioned state
-                new_system_prompt_text = SYSTEM_PROMPTS.get(new_state, SYSTEM_PROMPTS['intake'])
-                if new_state == 'strategies':
-                    interaction_count = session.get('interaction_count', 0)
-                    new_system_prompt_text = new_system_prompt_text.format(interaction_count=interaction_count)
+                interaction_count = session.get('interaction_count', 0)
+                new_system_prompt_text = get_prompt(new_state, interaction_count)
 
                 # Convert to array format with cache_control
                 new_system_prompt = [{
