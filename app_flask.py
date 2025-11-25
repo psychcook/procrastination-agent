@@ -260,6 +260,15 @@ def initialize_chat_session():
         session['session_completed'] = False
 
 
+def reset_chat_session():
+    """Reset chat session to start fresh. Preserves session_id for questionnaire linking."""
+    session['messages'] = []
+    session['current_state'] = 'intake'
+    session['interaction_count'] = 0
+    session['session_completed'] = False
+    session.modified = True
+
+
 def get_ai_response(user_message):
     """
     Get AI response using Claude API with state machine logic (non-streaming version).
@@ -405,17 +414,18 @@ def save_pre_q():
 
 @app.route('/chat')
 def chat():
-    """Chat interface."""
+    """Chat interface. Always starts fresh to ensure clean session."""
     session_id = get_or_create_session_id()
-    initialize_chat_session()
 
-    # Add welcome message if chat is empty
-    if not session.get('messages'):
-        welcome_msg = "Hallo! Ich bin hier, um dir zu helfen, deine Prokrastination zu verstehen und zu überwinden. Erzähl mir: Welche Aufgabe schiebst du gerade vor dir her?"
-        session['messages'] = [{
-            'role': 'assistant',
-            'content': welcome_msg
-        }]
+    # Reset chat session on each visit to start fresh
+    reset_chat_session()
+
+    # Add welcome message
+    welcome_msg = "Hallo! Ich bin hier, um dir zu helfen, deine Prokrastination zu verstehen und zu überwinden. Erzähl mir: Welche Aufgabe schiebst du gerade vor dir her?"
+    session['messages'] = [{
+        'role': 'assistant',
+        'content': welcome_msg
+    }]
 
     return render_template(
         'chat.html',
