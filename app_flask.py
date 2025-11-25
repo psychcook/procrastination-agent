@@ -96,6 +96,27 @@ talisman = Talisman(
 
 
 # ============================================================================
+# TOOL DEFINITIONS
+# ============================================================================
+
+TRANSITION_TOOL = {
+    "name": "transition_state",
+    "description": "Move the conversation to the next phase. Call this when the current phase goals are complete. Do NOT output text markers like [TRANSITION:x].",
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "state": {
+                "type": "string",
+                "enum": ["hypotheses", "strategies", "completion"],
+                "description": "The next conversation phase to transition to"
+            }
+        },
+        "required": ["state"]
+    }
+}
+
+
+# ============================================================================
 # SECURITY & VALIDATION FUNCTIONS
 # ============================================================================
 
@@ -239,24 +260,9 @@ def initialize_chat_session():
         session['session_completed'] = False
 
 
-def check_for_state_transition(message):
-    """
-    Check if AI message contains a state transition marker.
-    Returns: (cleaned_message, new_state or None)
-    """
-    pattern = r'\[TRANSITION:(\w+)\]'
-    match = re.search(pattern, message)
-
-    if match:
-        new_state = match.group(1)
-        cleaned_message = re.sub(pattern, '', message).strip()
-        return cleaned_message, new_state
-    return message, None
-
-
 def get_ai_response(user_message):
     """
-    Get AI response using Claude API with state machine logic.
+    Get AI response using Claude API with state machine logic (non-streaming version).
     Returns: (response_text, new_state or None)
     """
     if not client:
@@ -294,15 +300,24 @@ def get_ai_response(user_message):
         messages[-2]["cache_control"] = {"type": "ephemeral"}
 
     try:
-        # Call Claude API
+        # Call Claude API with transition tool
         response = client.messages.create(
             model="claude-sonnet-4-5-20250929",
             max_tokens=1024,
             system=system_prompt,
-            messages=messages
+            messages=messages,
+            tools=[TRANSITION_TOOL]
         )
 
-        ai_message = response.content[0].text
+        # Extract text response
+        ai_message = ""
+        new_state = None
+        for block in response.content:
+            if hasattr(block, 'type'):
+                if block.type == "text":
+                    ai_message = block.text
+                elif block.type == "tool_use" and block.name == "transition_state":
+                    new_state = block.input.get("state")
 
         # Log cache performance metrics
         usage = response.usage
@@ -320,10 +335,7 @@ def get_ai_response(user_message):
             f"state={current_state}"
         )
 
-        # Check for state transition
-        cleaned_message, new_state = check_for_state_transition(ai_message)
-
-        return cleaned_message, new_state
+        return ai_message, new_state
 
     except Exception as e:
         logger.error(f"Error in get_ai_response: {str(e)}")
@@ -500,20 +512,21 @@ def chat_api():
 
                 messages.append(message)
 
-            # Stream from Claude API
+            # Stream from Claude API with transition tool
             full_response = ""
             with client.messages.stream(
                 model="claude-sonnet-4-5-20250929",
                 max_tokens=1024,
                 system=system_prompt,
-                messages=messages
+                messages=messages,
+                tools=[TRANSITION_TOOL]
             ) as stream:
                 for text in stream.text_stream:
                     full_response += text
-                    # Send each chunk as SSE
+                    # Send each chunk as SSE (tool calls don't appear here)
                     yield f"data: {json.dumps({'text': text})}\n\n"
 
-                # Get usage metrics after stream completes
+                # Get final message and usage metrics
                 final_message = stream.get_final_message()
                 usage = final_message.usage
 
@@ -531,13 +544,19 @@ def chat_api():
                     f"state={current_state}"
                 )
 
-            # Check for state transition
-            cleaned_message, new_state = check_for_state_transition(full_response)
+            # Check for state transition via tool use
+            new_state = None
+            for block in final_message.content:
+                if hasattr(block, 'type') and block.type == "tool_use":
+                    if block.name == "transition_state":
+                        new_state = block.input.get("state")
+                        logger.info(f"State transition via tool: {current_state} -> {new_state}")
+                        break
 
-            # Store first AI response in session
+            # Store first AI response in session (no cleaning needed - tool calls aren't in text)
             session['messages'].append({
                 'role': 'assistant',
-                'content': cleaned_message
+                'content': full_response
             })
             session.modified = True
 
@@ -594,7 +613,8 @@ def chat_api():
                     model="claude-sonnet-4-5-20250929",
                     max_tokens=1024,
                     system=new_system_prompt,
-                    messages=continuation_messages
+                    messages=continuation_messages,
+                    tools=[TRANSITION_TOOL]
                 ) as stream:
                     for text in stream.text_stream:
                         continuation_response += text
@@ -624,7 +644,7 @@ def chat_api():
                 # Prepare final metadata (after continuation)
                 metadata = {
                     'type': 'metadata',
-                    'full_text': cleaned_message + " " + continuation_response,
+                    'full_text': full_response + " " + continuation_response,
                     'new_state': new_state,
                     'session_completed': new_state == 'completion',
                     'auto_continued': True
@@ -634,7 +654,7 @@ def chat_api():
                 # No transition - prepare metadata normally
                 metadata = {
                     'type': 'metadata',
-                    'full_text': cleaned_message,
+                    'full_text': full_response,
                     'new_state': None,
                     'session_completed': False,
                     'auto_continued': False
