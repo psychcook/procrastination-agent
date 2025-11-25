@@ -64,7 +64,7 @@ procrastination_agent/
 │   ├── questions.py         # Questionnaire definitions
 │   └── prompts/
 │       ├── __init__.py      # Prompt loader with get_prompt()
-│       └── system.txt       # Unified system prompt (~100 lines)
+│       └── system.md       # Unified system prompt (~100 lines)
 ├── utils/
 │   ├── storage.py          # JSON data persistence
 │   └── session.py          # Session management utilities
@@ -131,7 +131,7 @@ procrastination_agent/
 - Tool definition: `TRANSITION_TOOL` in `app_flask.py`
 - Transition detection: `tool_use` blocks checked after streaming
 - Auto-continuation: Second API call with updated state context
-- System prompt: `config/prompts/system.txt` with `get_prompt(state, interaction_count)`
+- System prompt: `config/prompts/system.md` with `get_prompt(state, interaction_count)`
 
 ### 3. Session & Data Management
 
@@ -193,7 +193,7 @@ procrastination_agent/
 - **Self-Efficacy Doubts** → Success journal, Past-wins list
 
 **Code Location:**
-- System prompt: `config/prompts/system.txt` (strategy matching guide section)
+- System prompt: `config/prompts/system.md` (strategy matching guide section)
 
 ---
 
@@ -406,7 +406,7 @@ All styles extracted from HTML prototype into `static/css/styles.css`:
 **Prompt Loading (`config/prompts/__init__.py`):**
 - `get_prompt(state, interaction_count=0)` - Returns formatted system prompt
 - Injects `{{CURRENT_STATE}}` and `{{INTERACTION_COUNT}}` into template
-- Single unified prompt in `config/prompts/system.txt`
+- Single unified prompt in `config/prompts/system.md`
 
 **Storage (`utils/storage.py`):**
 - `save_pre_questionnaire(session_id, answers)` - Save pre-Q data
@@ -525,7 +525,7 @@ If more capacity needed:
 
 **Configuration:**
 - `config/questions.py` - Pre/post questionnaire definitions
-- `config/prompts/system.txt` - Unified system prompt (~100 lines)
+- `config/prompts/system.md` - Unified system prompt (~100 lines)
 - `config/prompts/__init__.py` - Prompt loader with `get_prompt()` function
 - `nixpacks.toml` - Railway build config
 - `.env` - Local environment variables (gitignored)

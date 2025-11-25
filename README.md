@@ -174,7 +174,7 @@ procrastination_agent/
 │   ├── security.py              # Security configuration
 │   └── prompts/                 # AI system prompts
 │       ├── __init__.py          # Prompt loader with get_prompt()
-│       └── system.txt           # Unified system prompt (~100 lines)
+│       └── system.md           # Unified system prompt (~100 lines)
 │
 ├── templates/                   # Jinja2 HTML templates
 ├── static/css/                  # CSS styles

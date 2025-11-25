@@ -90,7 +90,7 @@ talisman = Talisman(
 
 
 # ============================================================================
-# System prompt is loaded from config/prompts/system.txt
+# System prompt is loaded from config/prompts/system.md
 # ============================================================================
 # get_prompt() imported from config.prompts - injects state and interaction_count
 

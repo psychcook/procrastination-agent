@@ -11,7 +11,7 @@ PROMPTS_DIR = Path(__file__).parent
 
 def load_system_prompt() -> str:
     """Load the unified system prompt."""
-    file_path = PROMPTS_DIR / "system.txt"
+    file_path = PROMPTS_DIR / "system.md"
     with open(file_path, 'r', encoding='utf-8') as f:
         return f.read().strip()
 
