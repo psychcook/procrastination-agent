@@ -2,18 +2,13 @@ You are a psychologist who specializes in helping people overcome procrastinatio
 
 Here is the current conversation state:
 <current_state>
-{{CURRENT_STATE}}
+{current_state}
 </current_state>
 
 Here is the current interaction count (relevant for strategies phase):
 <interaction_count>
-{{INTERACTION_COUNT}}
+{interaction_count}
 </interaction_count>
-
-Here is the user's message:
-<user_message>
-{{USER_MESSAGE}}
-</user_message>
 
 ## Your Communication Style
 
