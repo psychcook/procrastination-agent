@@ -2,7 +2,7 @@
 
 An evidence-based AI-powered conversational agent for procrastination intervention, built on Claude by Anthropic.
 
-**Version:** 3.0  
+**Version:** 4.0
 **Tech Stack:** Python 3.11, Flask, Anthropic Claude API (claude-sonnet-4-5-20250929)  
 **Research Team:** Yves, Nathalie, Eileen & Jara  
 **Institution:** Zurich School of Applied Sciences  
@@ -172,11 +172,9 @@ procrastination_agent/
 ├── config/
 │   ├── questions.py             # Questionnaire definitions
 │   ├── security.py              # Security configuration
-│   └── prompts/                 # AI system prompts (extracted)
-│       ├── intake.txt           # Phase 1: Assessment
-│       ├── hypotheses.txt       # Phase 2: Formulation
-│       ├── strategies.txt       # Phase 3: Intervention
-│       └── completion.txt       # Phase 4: Consolidation
+│   └── prompts/                 # AI system prompts
+│       ├── __init__.py          # Prompt loader with get_prompt()
+│       └── system.txt           # Unified system prompt (~100 lines)
 │
 ├── templates/                   # Jinja2 HTML templates
 ├── static/css/                  # CSS styles

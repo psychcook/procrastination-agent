@@ -1,7 +1,7 @@
 # Prokrastinations-Interventions-Agent - Technical Documentation
 
 **Project:** Prokrastinations-Interventions-Agent (Research MVP)
-**Version:** 3.0 (Flask + Streaming)
+**Version:** 4.0 (Flask + Streaming + Tool Transitions)
 **Tech Stack:** Python 3.11, Flask, Anthropic Claude API (Sonnet 4.5), Gunicorn, Railway
 **Authors:** Yves, Nathalie, Eileen & Jara
 **Institution:** Zurich School of Applied Sciences
@@ -61,7 +61,10 @@ procrastination_agent/
 │   └── css/
 │       └── styles.css       # Complete CSS from HTML prototype
 ├── config/
-│   └── questions.py         # Questionnaire definitions
+│   ├── questions.py         # Questionnaire definitions
+│   └── prompts/
+│       ├── __init__.py      # Prompt loader with get_prompt()
+│       └── system.txt       # Unified system prompt (~100 lines)
 ├── utils/
 │   ├── storage.py          # JSON data persistence
 │   └── session.py          # Session management utilities
@@ -93,33 +96,42 @@ procrastination_agent/
 - Metadata event at end: `data: {"type": "metadata", ...}\n\n`
 
 **Code Location:**
-- Backend: `app_flask.py` lines 312-403 (`/api/chat` endpoint)
-- Frontend: `templates/chat.html` lines 99-208 (event handler)
+- Backend: `chat_api()` function in `app_flask.py`
+- Frontend: `templates/chat.html` (SSE event handler in script block)
+
+**Note:** Tool calls (like state transitions) are handled separately from the text stream and never appear in user-visible output.
 
 ### 2. State Machine Logic
 
 **How It Works:**
 1. Agent decides when to transition between states
-2. Signals transitions with marker: `[TRANSITION:state_name]`
-3. `check_for_state_transition()` detects and removes marker
-4. State stored in Flask session, persists across requests
+2. Claude calls the `transition_state` tool with the target state
+3. Backend detects `tool_use` blocks in response and updates session state
+4. System auto-continues by streaming a second response in the new state
+5. State stored in Flask session, persists across requests
+
+**Tool-Based Transitions:**
+- `TRANSITION_TOOL` defined in `app_flask.py` allows transitions to: `hypotheses`, `strategies`, `completion`
+- Tool calls are separate from text stream (never visible to users)
+- After transition, system automatically generates continuation response in new state
 
 **Transition Rules:**
-- **Intake → Hypotheses:** After collecting all 4 key pieces of information
+- **Intake → Hypotheses:** After gathering task details and context
 - **Hypotheses → Strategies:** After user validates one or more hypotheses
-- **Strategies → Completion:** After user confirms they have a good plan
+- **Strategies → Completion:** After user confirms they have a good plan, or after 3+ exchanges
 - **Completion:** No further transitions (final state)
 
 **Interaction Counter:**
 - Tracks exchanges in `strategies` state
 - Prevents endless loops
 - Agent automatically prompts satisfaction check after 2-3 exchanges
-- Counter sent to Claude as part of system prompt
+- Counter passed to `get_prompt()` function
 
-**Code Location:**
-- State transitions: `app_flask.py` lines 209-215, 367-396
-- System prompts: `app_flask.py` lines 44-174
-- Counter logic: `app_flask.py` lines 329-331, 381-382
+**Key Components:**
+- Tool definition: `TRANSITION_TOOL` in `app_flask.py`
+- Transition detection: `tool_use` blocks checked after streaming
+- Auto-continuation: Second API call with updated state context
+- System prompt: `config/prompts/system.txt` with `get_prompt(state, interaction_count)`
 
 ### 3. Session & Data Management
 
@@ -154,7 +166,7 @@ procrastination_agent/
 **Code Location:**
 - Storage utilities: `utils/storage.py`
 - Session management: `utils/session.py`
-- API endpoints: `app_flask.py` lines 263-430
+- API endpoints: `app_flask.py` (save questionnaire and chat endpoints)
 
 ---
 
@@ -181,7 +193,7 @@ procrastination_agent/
 - **Self-Efficacy Doubts** → Success journal, Past-wins list
 
 **Code Location:**
-- System prompts: `app_flask.py` lines 88-163
+- System prompt: `config/prompts/system.txt` (strategy matching guide section)
 
 ---
 
@@ -313,10 +325,16 @@ data: {"text": " help"}
 
 data: {"text": "?"}
 
-data: {"type": "metadata", "full_text": "Hello! How can I help?", "new_state": null, "session_completed": false}
+data: {"type": "metadata", "full_text": "Hello! How can I help?", "new_state": null, "session_completed": false, "auto_continued": false}
 
 data: [DONE]
 ```
+
+**Metadata Fields:**
+- `full_text` - Complete response text
+- `new_state` - New state if transition occurred, otherwise `null`
+- `session_completed` - `true` when conversation reaches completion state
+- `auto_continued` - `true` if response includes continuation after state transition
 
 **Error Response:**
 ```
@@ -360,8 +378,8 @@ All styles extracted from HTML prototype into `static/css/styles.css`:
 - Error recovery
 
 **Code Locations:**
-- Questionnaires: `templates/*_questionnaire.html` (bottom script tags)
-- Chat streaming: `templates/chat.html` lines 99-208
+- Questionnaires: `templates/*_questionnaire.html` (script tags at bottom)
+- Chat streaming: `templates/chat.html` (SSE handler in script block)
 
 ---
 
@@ -373,15 +391,22 @@ All styles extracted from HTML prototype into `static/css/styles.css`:
 - `get_or_create_session_id()` - Get/create UUID session ID
 - `initialize_chat_session()` - Initialize chat state variables
 
-**State Machine:**
-- `check_for_state_transition(message)` - Detect `[TRANSITION:...]` markers
-- Returns: `(cleaned_message, new_state)`
+**State Transitions:**
+- `TRANSITION_TOOL` - Tool definition for Claude to call `transition_state`
+- Tool allows transitions to: `hypotheses`, `strategies`, `completion`
+- Transition detected by checking `tool_use` blocks in response
 
 **Chat Endpoint:**
-- `chat_api()` - Main streaming endpoint (lines 312-403)
-- Generator function yields SSE chunks
-- Handles state transitions
-- Updates Flask session
+- `chat_api()` - Main streaming endpoint with SSE
+- Generator function yields SSE-formatted chunks
+- Detects state transitions via tool_use blocks
+- Auto-continues with second response after state change
+- Returns metadata with `auto_continued` flag when applicable
+
+**Prompt Loading (`config/prompts/__init__.py`):**
+- `get_prompt(state, interaction_count=0)` - Returns formatted system prompt
+- Injects `{{CURRENT_STATE}}` and `{{INTERACTION_COUNT}}` into template
+- Single unified prompt in `config/prompts/system.txt`
 
 **Storage (`utils/storage.py`):**
 - `save_pre_questionnaire(session_id, answers)` - Save pre-Q data
@@ -494,12 +519,14 @@ If more capacity needed:
 ## 📁 Important Files
 
 **Core Application:**
-- `app_flask.py` - Main Flask app (450+ lines)
+- `app_flask.py` - Main Flask app (~800 lines)
 - `templates/*.html` - 6 HTML templates
 - `static/css/styles.css` - Complete CSS (400+ lines)
 
 **Configuration:**
 - `config/questions.py` - Pre/post questionnaire definitions
+- `config/prompts/system.txt` - Unified system prompt (~100 lines)
+- `config/prompts/__init__.py` - Prompt loader with `get_prompt()` function
 - `nixpacks.toml` - Railway build config
 - `.env` - Local environment variables (gitignored)
 - `requirements.txt` - Python dependencies
@@ -511,7 +538,6 @@ If more capacity needed:
 **Documentation:**
 - `CLAUDE.md` - This file (technical docs)
 - `RAILWAY_DEPLOYMENT.md` - Deployment guide
-- `STREAMING_RAILWAY_IMPLEMENTATION.md` - Implementation details
 - `README.md` - User-facing documentation
 
 ---
@@ -694,7 +720,7 @@ cat data/responses/*.json | python -m json.tool
 
 ---
 
-**Version:** 3.0 (Flask + Streaming)
+**Version:** 4.0 (Flask + Streaming + Tool Transitions)
 **Last Updated:** November 2025
 **Maintainers:** Yves, Nathalie, Eileen & Jara
 
