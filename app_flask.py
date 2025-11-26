@@ -563,12 +563,14 @@ def chat_api():
                         logger.info(f"State transition via tool: {current_state} -> {new_state}")
                         break
 
-            # Store first AI response in session (no cleaning needed - tool calls aren't in text)
-            session['messages'].append({
-                'role': 'assistant',
-                'content': full_response
-            })
-            session.modified = True
+            # Store first AI response in session (only if non-empty)
+            # When the model only calls a tool without text, full_response is empty
+            if full_response.strip():
+                session['messages'].append({
+                    'role': 'assistant',
+                    'content': full_response
+                })
+                session.modified = True
 
             # Handle state transition with auto-continuation
             if new_state:
@@ -598,6 +600,8 @@ def chat_api():
 
                 # Build messages including the first response (with content as array for caching)
                 continuation_session_messages = session.get('messages', [])
+                # Filter out any empty messages to prevent API errors
+                continuation_session_messages = [m for m in continuation_session_messages if m.get('content', '').strip()]
                 continuation_messages = []
                 for idx, msg in enumerate(continuation_session_messages):
                     # Convert content to array format required for prompt caching
@@ -644,12 +648,13 @@ def chat_api():
                         f"state={new_state}"
                     )
 
-                # Store continuation response in session
-                session['messages'].append({
-                    'role': 'assistant',
-                    'content': continuation_response
-                })
-                session.modified = True
+                # Store continuation response in session (only if non-empty)
+                if continuation_response.strip():
+                    session['messages'].append({
+                        'role': 'assistant',
+                        'content': continuation_response
+                    })
+                    session.modified = True
 
                 # Prepare final metadata (after continuation)
                 metadata = {
